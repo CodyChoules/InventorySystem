@@ -1,2 +1,4 @@
-package codychoules.application.main;public class InventorySystemApplication {
+package codychoules.application.main;
+
+public class InventorySystemApplication {
 }
