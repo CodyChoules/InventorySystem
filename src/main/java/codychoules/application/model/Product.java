@@ -122,6 +122,7 @@ public class Product {
 
     //TODO check javadocs notation after you have reviewed JavaDoc implementation.
     /**
+     * @param  selectedAssociatedPart part to be deleted
      * @return true if part found
      */
     public Boolean deleteAssociatedPart(Part selectedAssociatedPart){

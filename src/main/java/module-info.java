@@ -1,6 +1,7 @@
 module codychoules.application.inventorysystem {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     opens codychoules.application.main to javafx.fxml;
