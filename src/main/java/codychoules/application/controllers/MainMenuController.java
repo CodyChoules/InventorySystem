@@ -1,9 +1,13 @@
 package codychoules.application.controllers;
 
 
+import codychoules.application.model.Part;
 import codychoules.devtools.DevTool;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 
 import java.net.URL;
@@ -11,6 +15,18 @@ import java.util.ResourceBundle;
 
 
 public class MainMenuController implements Initializable {
+    @FXML
+    public TableView<Part> PartTable;
+    @FXML
+    public TableColumn<Part, Integer> PartIDCol;
+    @FXML
+    public TableColumn<Part, String> PartNameCol;
+    @FXML
+    public TableColumn<Part, Integer> PartStockCol;
+    @FXML
+    public TableColumn<Part, Double> PartPriceCol;
+
+
     @Override  //Initialization on menu view load
     public void initialize(URL location, ResourceBundle resources) {
         DevTool.println("Control Initialization Start...");
@@ -23,9 +39,9 @@ public class MainMenuController implements Initializable {
         // Table.setTable();
 
         //Dev tool
-//        for (Part item : PartList.getThePartList()) {
-//            System.out.println(item.getPartName());
-//        }
+        for (Part item : PartList.getThePartList()) {
+            System.out.println(item.getPartName());
+        }
 
         //Part Table Column Initialization
 //        PartIDCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("partID"));
