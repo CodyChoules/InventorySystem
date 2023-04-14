@@ -1,6 +1,7 @@
 package codychoules.application.controllers;
 
 
+import codychoules.application.model.Inventory;
 import codychoules.application.model.Part;
 import codychoules.devtools.DevTool;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 
 import java.net.URL;
@@ -38,17 +40,20 @@ public class MainMenuController implements Initializable {
         //!!!! why cant I call this a function here :
         // Table.setTable();
 
-        //Dev tool
-        for (Part item : PartList.getThePartList()) {
-            System.out.println(item.getPartName());
+        //adding test data
+        Inventory.addTestData();
+
+        //Dev tool to check test data insert
+        for (Part item : Inventory.getAllParts()) {
+            DevTool.println( item.getName());
         }
 
         //Part Table Column Initialization
-//        PartIDCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("partID"));
-//        PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("partName"));
-//        InvLevelCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("inventoryLevel"));
-//        CostPerPartCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("pricePerUnit"));
-//        PartTable.setItems(PartList.getThePartList());
+        PartIDCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("id"));
+        PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+//        InvLevelCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
+//        CostPerPartCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
+        PartTable.setItems(Inventory.getAllParts());
 //        System.out.println("Table Set");
 
         //Product Table Column Initialization
