@@ -91,7 +91,41 @@ public class MainMenuController implements Initializable {
         DevTool.println("Stage & Scene Set");
     }
 
-    public void handleModPartButton(ActionEvent actionEvent) {
+    public void handleModPartButton(ActionEvent actionEvent) throws IOException {
+        System.out.println("modPartClick");
+
+        //Retrieves the selected part to be modified !!!! needs NUll exception
+
+        Part select = PartTable.getSelectionModel().getSelectedItem();
+        PartMenuController.passSelection(select);
+        if (select == null) {return;}
+        Part selection = Objects.requireNonNull(select);
+
+
+        //Sets loader to target view, loader assignment needed for exhibitB shown below.
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("part-menu-view.fxml")));
+        Parent root = loader.load();
+
+        System.out.println("part selection created: ID: " + selection.getId() + " Name: " + selection.getName());
+
+        //"codychoules/application/main/part-menu-view.fxml"
+
+        //exhibitB: using loader to access ModifyProductController.displayPartInFields method, Needed to keep method non-static
+        PartMenuController mp = loader.getController(); // must be done after "FXMLLoader.load()" method.
+        mp.displayPartInFields(selection);
+
+        //Sets stage and scene,
+        // Needed to set the location, title, & size for the new scene
+        Stage modStage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Scene modScene = new Scene(root, 1000,500);
+
+        modStage.setTitle("Modify Part Window");
+        modStage.setScene(modScene);
+        modStage.show();
+
+        DevTool.println("Stage & Scene Set");
+
+
     }
 
     public void handleDelPartButton(ActionEvent actionEvent) {

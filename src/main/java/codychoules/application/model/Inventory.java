@@ -88,8 +88,7 @@ public class Inventory {
         } else {
             System.out.println("ID blank error");
             ex = ex.concat("No data in ID field \n");
-
-
+            inputfail = true;
         }
 
         if (partInvField.getText().length() != 0) {
@@ -103,6 +102,7 @@ public class Inventory {
         } else {
             System.out.println("Inv blank error");
             ex = ex.concat("No data in Inv field \n");
+            inputfail = true;
         }
 
         if (partPriceField.getText().length() != 0) {
@@ -116,6 +116,7 @@ public class Inventory {
         } else {
             System.out.println("Price blank error");
             ex = ex.concat("No data in Price field \n");
+            inputfail = true;
         }
 
         if (partMaxField.getText().length() != 0) {
@@ -129,6 +130,7 @@ public class Inventory {
         } else {
             System.out.println("Max blank error");
             ex = ex.concat("No data in Max field \n");
+            inputfail = true;
         }
 
         if (partMinField.getText().length() != 0) {
@@ -142,6 +144,7 @@ public class Inventory {
         } else {
             System.out.println("Min blank error");
             ex = ex.concat("No data in Min field \n");
+            inputfail = true;
         }
         //////
         if (!inputfailminmax) {

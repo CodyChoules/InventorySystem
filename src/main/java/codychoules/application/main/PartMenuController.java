@@ -8,6 +8,7 @@ import codychoules.devtools.DevTool;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PartMenuController {
+public class PartMenuController implements Initializable {
     //!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
 
     //FXML Declarations
@@ -31,22 +32,6 @@ public class PartMenuController {
     public RadioButton togglePartOutsourcedButton;
     @FXML
     public RadioButton togglePartInHouseButton;
-    @FXML
-    public TextField modPartIDField;
-    @FXML
-    public TextField modPartNameField;
-    @FXML
-    public TextField modPartInvField;
-    @FXML
-    public TextField modPartPriceField;
-    @FXML
-    public TextField modPartMaxField;
-    @FXML
-    public TextField modPartMinField;
-    @FXML
-    public TextField modPartMachineIDField;
-    @FXML
-    public Text modMachineIdText;
     @FXML
     public Text errorText;
     @FXML
@@ -86,12 +71,12 @@ public class PartMenuController {
 
         //Calls a part method to validate inputs, "errorText" is where the notifications will be sent.
         boolean check = Inventory.partTextInputCheck(
-                modPartIDField,
-                modPartInvField,
-                modPartPriceField,
-                modPartMaxField,
-                modPartMinField,
-                modPartMachineIDField,
+                addPartIDField,
+                addPartInvField,
+                addPartPriceField,
+                addPartMaxField,
+                addPartMinField,
+                addPartMachineIDField,
                 togglePartOutsourcedButton,
                 errorText);
         if (!check) {
@@ -100,26 +85,25 @@ public class PartMenuController {
         }
 
         //Retrieves values from the fields now that they have been validated
-        int id = Integer.parseInt(modPartIDField.getText());
-        String name = modPartNameField.getText();
-        int inv = Integer.parseInt(modPartInvField.getText());
-        double price = Double.parseDouble(modPartPriceField.getText());
-        int max = Integer.parseInt(modPartMaxField.getText());
-        int min = Integer.parseInt(modPartMinField.getText());
+        int id = Integer.parseInt(addPartIDField.getText());
+        String name = addPartNameField.getText();
+        int inv = Integer.parseInt(addPartInvField.getText());
+        double price = Double.parseDouble(addPartPriceField.getText());
+        int max = Integer.parseInt(addPartMaxField.getText());
+        int min = Integer.parseInt(addPartMinField.getText());
 
-        //machineID must be null, or we must create 2 new subclasses for Part(1 outsourced & 1 in-house)
-        int machineid = 0;
+        //initializing child class variables, Needed for clean start for assignment
+        int machineid = -1;
         String supplier = null;
 
-        //after setting both to null
+        //Assignment of supplier or machined to inherited part object
         if (togglePartOutsourcedButton.isSelected()) {
-            supplier = modPartMachineIDField.getText();
+            supplier = addPartMachineIDField.getText();
         } else {
-
-            //vvvvvvvvvvvvvv
-            machineid = Integer.parseInt(modPartMachineIDField.getText());
+            machineid = Integer.parseInt(addPartMachineIDField.getText());
         }
 
+        //Creation of part instance and parameter placement based on type(concrete class)
         Part modingPart;
         if (togglePartInHouseButton.isSelected()) {
             modingPart = new InHouse(id, name, price, inv, min,  max, machineid);
@@ -128,6 +112,8 @@ public class PartMenuController {
         }
 
         Inventory.allParts.add(modingPart);
+
+        //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
 
         DevTool.printPartData(modingPart);
@@ -136,7 +122,7 @@ public class PartMenuController {
     int tick = 0;
     public void clickInHouseHandler(ActionEvent actionEvent) {
         DevTool.println("In-House Clicked");
-        modMachineIdText.setText("Machine ID");
+        addMachineIdText.setText("Machine ID");
         tick++;
     }
 
@@ -146,43 +132,46 @@ public class PartMenuController {
         if (tick > 15) {
             txt = "Make up your mind!";
         }
-        modMachineIdText.setText(txt);
+        addMachineIdText.setText(txt);
     }
 
-//    public static Part partBeingModded = null;
-//
-//    public static void passSelection(Part selection) {
-//        partBeingModded = selection;
-//    }
+    public static Part partBeingModded = null;
+
+    public static void passSelection(Part selection) {
+        partBeingModded = selection;
+    }
 
     //TODO Implement mod part functionality
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        DevTool.println("part" + partBeingModded.getId() +" "+ partBeingModded.getName());
-//    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (partBeingModded != null) {
+            DevTool.println("part" + partBeingModded.getId() + " " + partBeingModded.getName());
+        }
+    }
 
 
+    public void displayPartInFields(Part passedPart){
 
-
-//    private Part football = null;
-//    public void displayPartInFields(Part football){
-//        this.football = football;
-//
-//        modPartIDField.setPromptText(String.valueOf(football.getPartID()));
-//        modPartIDField.setText(String.valueOf(football.getPartID()));
-//        modPartNameField.setPromptText(String.valueOf(football.getPartName()));
-//        modPartNameField.setText(String.valueOf(football.getPartName()));
-//        modPartInvField.setPromptText(String.valueOf(football.getInventoryLevel()));
-//        modPartInvField.setText(String.valueOf(football.getInventoryLevel()));
-//        modPartPriceField.setPromptText(String.valueOf(football.getPricePerUnit()));
-//        modPartPriceField.setText(String.valueOf(football.getPricePerUnit()));
-//        modPartMaxField.setPromptText(String.valueOf(football.getMax()));////////
-//        modPartMaxField.setText(String.valueOf(football.getMax()));
-//        modPartMinField.setPromptText(String.valueOf(football.getMin()));
-//        modPartMinField.setText(String.valueOf(football.getMin()));
-//        modPartMachineIDField.setPromptText(String.valueOf(football.getMachineID()));
-//        modPartMachineIDField.setText(String.valueOf(football.getMachineID()));
-//
-//
-//    }
+        addPartIDField.setPromptText(String.valueOf(passedPart.getId()));
+        addPartIDField.setText(String.valueOf(passedPart.getId()));
+        addPartNameField.setPromptText(String.valueOf(passedPart.getName()));
+        addPartNameField.setText(String.valueOf(passedPart.getName()));
+        addPartInvField.setPromptText(String.valueOf(passedPart.getStock()));
+        addPartInvField.setText(String.valueOf(passedPart.getStock()));
+        addPartPriceField.setPromptText(String.valueOf(passedPart.getPrice()));
+        addPartPriceField.setText(String.valueOf(passedPart.getPrice()));
+        addPartMaxField.setPromptText(String.valueOf(passedPart.getMax()));
+        addPartMaxField.setText(String.valueOf(passedPart.getMax()));
+        addPartMinField.setPromptText(String.valueOf(passedPart.getMin()));
+        addPartMinField.setText(String.valueOf(passedPart.getMin()));
+        if (passedPart.getClass().getName().equals("InHouse")) {
+            InHouse ih = (InHouse) passedPart;
+            addPartMachineIDField.setPromptText(String.valueOf(ih.getMachineID()));
+            addPartMachineIDField.setText(String.valueOf(ih.getMachineID()));
+        } else {
+            Outsourced os = (Outsourced) passedPart;
+            addPartMachineIDField.setPromptText(String.valueOf(os.getCompanyName()));
+            addPartMachineIDField.setText(String.valueOf(os.getCompanyName()));
+        }
+    }
 }
