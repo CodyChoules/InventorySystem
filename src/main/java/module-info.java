@@ -8,4 +8,6 @@ module codychoules.application.inventorysystem {
     exports codychoules.application.main;
     exports codychoules.application.controllers;
     opens codychoules.application.controllers to javafx.fxml;
+    exports codychoules.application.model;
+    opens codychoules.application.model to javafx.fxml;
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.PartMenuController">
+    <children>
+        <RadioButton fx:id="togglePartInHouseButton" layoutX="210.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickInHouseHandler" selected="true" text="In-House">
+            <toggleGroup>
+                <ToggleGroup fx:id="PartSourceTG" />
+            </toggleGroup></RadioButton>
+        <RadioButton fx:id="togglePartOutsourcedButton" layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickOutsourcedHandler" text="Outsourced" toggleGroup="$PartSourceTG" />
+        <Text layoutX="120.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" wrappingWidth="90.0" />
+        <TextField fx:id="addPartIDField" layoutX="210.0" layoutY="94.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="120.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="90.0" />
+        <TextField fx:id="addPartNameField" layoutX="210.0" layoutY="134.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="120.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inv" wrappingWidth="90.0" />
+        <TextField fx:id="addPartInvField" layoutX="210.0" layoutY="167.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="120.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price/Cost" wrappingWidth="90.0" />
+        <TextField fx:id="addPartPriceField" layoutX="210.0" layoutY="200.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="120.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max" wrappingWidth="90.0" />
+        <TextField fx:id="addPartMaxField" layoutX="210.0" layoutY="235.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="385.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" />
+        <TextField fx:id="addPartMinField" layoutX="414.0" layoutY="235.0" onAction="#onTextFieldEnterPart" prefHeight="25.0" prefWidth="127.0" />
+        <Text fx:id="addMachineIdText" layoutX="120.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Machine ID" wrappingWidth="90.0" />
+        <TextField fx:id="addPartMachineIDField" layoutX="210.0" layoutY="267.0" onAction="#onTextFieldEnterPart" />
+        <Text layoutX="75.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Part" wrappingWidth="134.76171875">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Text>
+        <ButtonBar layoutX="361.0" layoutY="260.0" prefHeight="40.0" prefWidth="164.0">
+            <buttons>
+                <Button fx:id="saveAddPartButton" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+                <Button fx:id="cancelAddPartButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
+            </buttons>
+        </ButtonBar>
+        <Text fx:id="errorText" layoutX="115.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="387.0" />
+    </children>
+</AnchorPane>

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.controllers.MainMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.MainMenuController">
     <VBox prefHeight="600.0" prefWidth="1000.0">
         <children>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
@@ -52,8 +52,8 @@
                         <columns>
                             <TableColumn fx:id="ProductIDCol" text="Product ID" />
                             <TableColumn fx:id="ProductNameCol" prefWidth="118.0" text="Product Name" />
-                            <TableColumn fx:id="ProdInvLvlCol" prefWidth="116.0" text="Inventory Level" />
-                            <TableColumn fx:id="CostPerProdCol" minWidth="20.0" prefWidth="142.0" resizable="false" text="Price Per Unit" />
+                            <TableColumn fx:id="ProductStockCol" prefWidth="116.0" text="Inventory Level" />
+                            <TableColumn fx:id="ProductPriceCol" minWidth="20.0" prefWidth="142.0" resizable="false" text="Price Per Unit" />
                         </columns>
                     </TableView>
                     <HBox spacing="10">
