@@ -4,6 +4,9 @@ import codychoules.devtools.DevTool;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Inventory {
 
 
@@ -15,6 +18,27 @@ public class Inventory {
     public static ObservableList<Part> getAllParts(){
         return allParts;
     }
+    //retrieves a list of all partIds in main list for
+    public static List<Integer> getAllPartIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (Part part : allParts) {
+            ids.add(part.getId());
+        }
+        return ids;
+    }
+
+
+    private static int nextId = 1;
+    public static int generateUniqueId(List<Integer> idList) {
+        int id = nextId;
+        while (idList.contains(id)) {
+            id = ++nextId;
+        }
+        idList.add(id);
+        return id;
+    }
+
+
 
 
 
@@ -38,11 +62,11 @@ public class Inventory {
         testDataInserted =true;
 
         //Creating and adding test data.
-        Part part1 = new Outsourced(1, "Bolt", 1, 1, 1, 2,"1");
+        Part part1 = new Outsourced(generateUniqueId(getAllPartIds()), "Bolt", 1, 1, 1, 2,"1");
         add(part1);
-        Part part2 = new Outsourced(2, "Nut", 1,  1, 1, 2, "sam's CNC");
+        Part part2 = new Outsourced(generateUniqueId(getAllPartIds()), "Nut", 1,  1, 1, 2, "sam's CNC");
         add(part2);
-        Part part3 = new Outsourced(3, "Screw", 1,  1, 1, 2, "fire forge");
+        Part part3 = new Outsourced(generateUniqueId(getAllPartIds()), "Screw", 1,  1, 1, 2, "fire forge");
         add(part3);
 
         //Dev tool to check test data insert
@@ -192,5 +216,7 @@ public class Inventory {
         }
         return true;
     }
+
+
 
 }
