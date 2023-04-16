@@ -134,7 +134,23 @@ public class MainMenuController implements Initializable {
     public void handleSearchParButton(ActionEvent actionEvent) {
     }
 
-    public void handleAddProductButton(ActionEvent actionEvent) {
+    public void handleAddProductButton(ActionEvent actionEvent) throws IOException {
+        DevTool.println("addProductClick");
+        //Sets root to view,
+        // loader assignment Not Needed without need to access loader methods like .getController()
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("product-menu-view.fxml")));
+        //"codychoules/application/main/product-menu-view.fxml"
+
+        //Sets stage and scene,
+        // Needed to set the location, title, & size for the new scene
+        Stage modStage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Scene modScene = new Scene(root, 1000,500);
+
+        modStage.setTitle("Add Product Window");
+        modStage.setScene(modScene);
+        modStage.show();
+
+        DevTool.println("Stage & Scene Set");
     }
 
     public void handleModProductButton(ActionEvent actionEvent) {

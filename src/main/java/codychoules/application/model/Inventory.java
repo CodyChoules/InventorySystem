@@ -340,6 +340,95 @@ public class Inventory {
         return true;
     }
 
+    public static boolean partTextInputCheck(
+            javafx.scene.control.TextField partInvField,
+            javafx.scene.control.TextField partPriceField,
+            javafx.scene.control.TextField partMaxField,
+            javafx.scene.control.TextField partMinField,
+            javafx.scene.control.RadioButton togglePartOutsourcedButton,
+            javafx.scene.text.Text errorText)
+    {
+        //!!!! why is this underlined
+        boolean inputfail = false;
+        boolean inputfailminmax = false;
+        String ex = "\n";
+        System.out.println("partTextInputCheck started");
+
+        if (partInvField.getText().length() != 0) {
+            try {
+                Integer.parseInt(partInvField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("error 2 Inv");
+                inputfail = true;
+                ex = ex.concat("Inventory level is not an integer \n");
+            }
+        } else {
+            System.out.println("Inv blank error");
+            ex = ex.concat("No data in Inv field \n");
+            inputfail = true;
+        }
+
+        if (partPriceField.getText().length() != 0) {
+            try {
+                Double.parseDouble(partPriceField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("error 3 Price");
+                inputfail = true;
+                ex = ex.concat("Price is not a double \n");
+            }
+        } else {
+            System.out.println("Price blank error");
+            ex = ex.concat("No data in Price field \n");
+            inputfail = true;
+        }
+
+        if (partMaxField.getText().length() != 0) {
+            try {
+                Double.parseDouble(partMaxField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("error 4 max");
+                inputfail = true;
+                ex = ex.concat("Maximum inventory level is not a integer \n");
+            }
+        } else {
+            System.out.println("Max blank error");
+            ex = ex.concat("No data in Max field \n");
+            inputfail = true;
+        }
+
+        if (partMinField.getText().length() != 0) {
+            try {
+                Double.parseDouble(partMinField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("error 5 Min");
+                inputfail = true;
+                ex = ex.concat("Minimum inventory level is not an integer \n");
+            }
+        } else {
+            System.out.println("Min blank error");
+            ex = ex.concat("No data in Min field \n");
+            inputfail = true;
+        }
+        //////
+        if (!inputfailminmax) {
+            try {
+                if (Double.parseDouble(partMinField.getText()) > Double.parseDouble(partMaxField.getText())) {
+                    System.out.println("error MIN>MAX");
+                    inputfail = true;
+                    ex = ex.concat("Minimum inventory level cannot be greater than maximum inventory level \n");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("error no min max compare");
+                inputfail = true;
+            }
+        }
+
+        if (inputfail) {
+            errorText.setText("Exception:" + ex);
+            return false;
+        }
+        return true;
+    }
 
 
 }

@@ -2,6 +2,7 @@ package codychoules.devtools;
 
 import codychoules.application.model.Outsourced;
 import codychoules.application.model.Part;
+import codychoules.application.model.Product;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -34,18 +35,30 @@ public class DevTool {
     }
 
 
-    //TODO this must be able to print M.Id & S.Name
     public static void printPartData(Part part) {
-        if (devToolsOn){
+        if (devToolsOn) {
             System.out.println("New Part Created: " +
-                part.getName() +
-                " ID:" + part.getId() +
-                " Inv:" + part.getStock() +
-                " Price:$" + part.getPrice() +
-                " Max:" + part.getMax() +
-                " Min:" + part.getMin() + "\n");
+                    part.getName() +
+                    " ID:" + part.getId() +
+                    " Inv:" + part.getStock() +
+                    " Price:$" + part.getPrice() +
+                    " Max:" + part.getMax() +
+                    " Min:" + part.getMin() + "\n");
+            //TODO this must be able to print M.Id & S.Name
 //                " MachineID:" + part.getMachineID() +
 //                " Supplier Name:" + part.getSupplierName());
-         }
+        }
+    }
+
+    public static void printProductData(Product product) {
+        if (devToolsOn) {
+            System.out.println("New Part Created: " +
+                    product.getName() +
+                    " ID:" + product.getId() +
+                    " Inv:" + product.getStock() +
+                    " Price:$" + product.getPrice() +
+                    " Max:" + product.getMax() +
+                    " Min:" + product.getMin() + "\n");
+        }
     }
 }

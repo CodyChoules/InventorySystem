@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.ProductMenuController">
+    <children>
+        <RadioButton fx:id="toggleProductInHouseButton" layoutX="210.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickInHouseHandler" selected="true" text="In-House">
+            <toggleGroup>
+                <ToggleGroup fx:id="ProductSourceTG" />
+            </toggleGroup></RadioButton>
+        <RadioButton fx:id="toggleProductOutsourcedButton" layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickOutsourcedHandler" text="Outsourced" toggleGroup="$ProductSourceTG" />
+        <Text layoutX="120.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" wrappingWidth="90.0" />
+        <TextField fx:id="addProductIDField" disable="true" editable="false" focusTraversable="false" layoutX="210.0" layoutY="94.0" onAction="#onTextFieldEnterProduct" opacity="0.6" promptText="(Auto Generated)" />
+        <Text layoutX="120.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="90.0" />
+        <TextField fx:id="addProductNameField" layoutX="210.0" layoutY="134.0" onAction="#onTextFieldEnterProduct" />
+        <Text layoutX="120.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inv" wrappingWidth="90.0" />
+        <TextField fx:id="addProductInvField" layoutX="210.0" layoutY="167.0" onAction="#onTextFieldEnterProduct" />
+        <Text layoutX="120.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price/Cost" wrappingWidth="90.0" />
+        <TextField fx:id="addProductPriceField" layoutX="210.0" layoutY="200.0" onAction="#onTextFieldEnterProduct" />
+        <Text layoutX="120.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max" wrappingWidth="90.0" />
+        <TextField fx:id="addProductMaxField" layoutX="210.0" layoutY="235.0" onAction="#onTextFieldEnterProduct" />
+        <Text layoutX="385.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" />
+        <TextField fx:id="addProductMinField" layoutX="414.0" layoutY="235.0" onAction="#onTextFieldEnterProduct" prefHeight="25.0" prefWidth="127.0" />
+        <Text layoutX="75.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Product" wrappingWidth="134.76171875">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Text>
+        <ButtonBar layoutX="361.0" layoutY="260.0" prefHeight="40.0" prefWidth="164.0">
+            <buttons>
+                <Button fx:id="saveAddProductButton" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+                <Button fx:id="cancelAddProductButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
+            </buttons>
+        </ButtonBar>
+        <Text fx:id="errorText" layoutX="115.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="387.0" />
+    </children>
+</AnchorPane>
