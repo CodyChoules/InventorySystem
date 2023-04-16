@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static codychoules.application.model.Inventory.getAllPartIds;
 import static codychoules.application.model.Inventory.getAllProductIds;
 
 public class PartMenuController implements Initializable {
@@ -73,7 +74,6 @@ public class PartMenuController implements Initializable {
 
         //Calls a part method to validate inputs, "errorText" is where the notifications will be sent.
         boolean check = Inventory.partTextInputCheck(
-                addPartIDField,
                 addPartInvField,
                 addPartPriceField,
                 addPartMaxField,
@@ -87,7 +87,7 @@ public class PartMenuController implements Initializable {
         }
 
         //Retrieves values from the fields now that they have been validated
-        int id = Inventory.generateUniqueId(getAllProductIds(), Inventory.nextPartId);
+        int id = Inventory.generateUniqueId(getAllPartIds(), Inventory.nextPartId);
         String name = addPartNameField.getText();
         int inv = Integer.parseInt(addPartInvField.getText());
         double price = Double.parseDouble(addPartPriceField.getText());
