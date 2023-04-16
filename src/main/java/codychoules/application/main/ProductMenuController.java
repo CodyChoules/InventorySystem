@@ -3,7 +3,7 @@ package codychoules.application.main;
 import codychoules.application.model.InHouse;
 import codychoules.application.model.Inventory;
 import codychoules.application.model.Outsourced;
-import codychoules.application.model.Part;
+import codychoules.application.model.Product;
 import codychoules.devtools.DevTool;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,28 +24,28 @@ import java.util.ResourceBundle;
 
 import static codychoules.application.model.Inventory.getAllProductIds;
 
-public class PartMenuController implements Initializable {
+public class ProductMenuController implements Initializable {
     //!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
 
     //FXML Declarations
     @FXML
-    public Button cancelModPartButton;
+    public Button cancelModProductButton;
     @FXML
-    public RadioButton togglePartOutsourcedButton;
+    public RadioButton toggleProductOutsourcedButton;
     @FXML
-    public RadioButton togglePartInHouseButton;
+    public RadioButton toggleProductInHouseButton;
     @FXML
     public Text errorText;
     @FXML
-    public Button saveModPartButton;
-    public TextField addPartIDField;
-    public TextField addPartNameField;
-    public TextField addPartInvField;
-    public TextField addPartPriceField;
-    public TextField addPartMaxField;
-    public TextField addPartMinField;
+    public Button saveModProductButton;
+    public TextField addProductIDField;
+    public TextField addProductNameField;
+    public TextField addProductInvField;
+    public TextField addProductPriceField;
+    public TextField addProductMaxField;
+    public TextField addProductMinField;
     public Text addMachineIdText;
-    public TextField addPartMachineIDField;
+    public TextField addProductMachineIDField;
 
     @FXML
     public void handleCancelButton(ActionEvent actionEvent) throws IOException {
@@ -62,7 +62,7 @@ public class PartMenuController implements Initializable {
     }
 
     @FXML //handles Save when pressing enter on text feild, For ease of use.
-    public void onTextFieldEnterPart(ActionEvent actionEvent) {
+    public void onTextFieldEnterProduct(ActionEvent actionEvent) {
         DevTool.println("Enter Pressed on Field");
         handleSaveButton(actionEvent);
     }
@@ -73,13 +73,13 @@ public class PartMenuController implements Initializable {
 
         //Calls a part method to validate inputs, "errorText" is where the notifications will be sent.
         boolean check = Inventory.partTextInputCheck(
-                addPartIDField,
-                addPartInvField,
-                addPartPriceField,
-                addPartMaxField,
-                addPartMinField,
-                addPartMachineIDField,
-                togglePartOutsourcedButton,
+                addProductIDField,
+                addProductInvField,
+                addProductPriceField,
+                addProductMaxField,
+                addProductMinField,
+                addProductMachineIDField,
+                toggleProductOutsourcedButton,
                 errorText);
         if (!check) {
             //Prevents invalid data from being saved
@@ -87,38 +87,38 @@ public class PartMenuController implements Initializable {
         }
 
         //Retrieves values from the fields now that they have been validated
-        int id = Inventory.generateUniqueId(getAllProductIds(), Inventory.nextPartId);
-        String name = addPartNameField.getText();
-        int inv = Integer.parseInt(addPartInvField.getText());
-        double price = Double.parseDouble(addPartPriceField.getText());
-        int max = Integer.parseInt(addPartMaxField.getText());
-        int min = Integer.parseInt(addPartMinField.getText());
+        int id = Inventory.generateUniqueId(getAllProductIds(), Inventory.nextProductId);
+        String name = addProductNameField.getText();
+        int inv = Integer.parseInt(addProductInvField.getText());
+        double price = Double.parseDouble(addProductPriceField.getText());
+        int max = Integer.parseInt(addProductMaxField.getText());
+        int min = Integer.parseInt(addProductMinField.getText());
 
         //initializing child class variables, Needed for clean start for assignment
         int machineid = -1;
         String supplier = null;
 
         //Assignment of supplier or machined to inherited part object
-        if (togglePartOutsourcedButton.isSelected()) {
-            supplier = addPartMachineIDField.getText();
+        if (toggleProductOutsourcedButton.isSelected()) {
+            supplier = addProductMachineIDField.getText();
         } else {
-            machineid = Integer.parseInt(addPartMachineIDField.getText());
+            machineid = Integer.parseInt(addProductMachineIDField.getText());
         }
 
         //Creation of part instance and parameter placement based on type(concrete class)
-        Part modingPart;
-        if (togglePartInHouseButton.isSelected()) {
-            modingPart = new InHouse(id, name, price, inv, min,  max, machineid);
+        Product modingProduct;
+        if (toggleProductInHouseButton.isSelected()) {
+            modingProduct = new InHouse(id, name, price, inv, min,  max, machineid);
         } else {
-            modingPart = new Outsourced(id, name, price, inv, min, max, supplier);
+            modingProduct = new Outsourced(id, name, price, inv, min, max, supplier);
         }
 
-        Inventory.allParts.add(modingPart);
+        Inventory.allProducts.add(modingProduct);
 
         //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
 
-        DevTool.printPartData(modingPart);
+        DevTool.printProductData(modingProduct);
     }
 
     int tick = 0;
@@ -137,9 +137,9 @@ public class PartMenuController implements Initializable {
         addMachineIdText.setText(txt);
     }
 
-    public static Part partBeingModded = null;
+    public static Product partBeingModded = null;
 
-    public static void passSelection(Part selection) {
+    public static void passSelection(Product selection) {
         partBeingModded = selection;
     }
 
@@ -152,28 +152,28 @@ public class PartMenuController implements Initializable {
     }
 
 
-    public void displayPartInFields(Part passedPart){
+    public void displayProductInFields(Product passedProduct){
 
-        addPartIDField.setPromptText(String.valueOf(passedPart.getId()));
-        addPartIDField.setText(String.valueOf(passedPart.getId()));
-        addPartNameField.setPromptText(String.valueOf(passedPart.getName()));
-        addPartNameField.setText(String.valueOf(passedPart.getName()));
-        addPartInvField.setPromptText(String.valueOf(passedPart.getStock()));
-        addPartInvField.setText(String.valueOf(passedPart.getStock()));
-        addPartPriceField.setPromptText(String.valueOf(passedPart.getPrice()));
-        addPartPriceField.setText(String.valueOf(passedPart.getPrice()));
-        addPartMaxField.setPromptText(String.valueOf(passedPart.getMax()));
-        addPartMaxField.setText(String.valueOf(passedPart.getMax()));
-        addPartMinField.setPromptText(String.valueOf(passedPart.getMin()));
-        addPartMinField.setText(String.valueOf(passedPart.getMin()));
-        if (passedPart.getClass().getName().equals("InHouse")) {
-            InHouse ih = (InHouse) passedPart;
-            addPartMachineIDField.setPromptText(String.valueOf(ih.getMachineID()));
-            addPartMachineIDField.setText(String.valueOf(ih.getMachineID()));
+        addProductIDField.setPromptText(String.valueOf(passedProduct.getId()));
+        addProductIDField.setText(String.valueOf(passedProduct.getId()));
+        addProductNameField.setPromptText(String.valueOf(passedProduct.getName()));
+        addProductNameField.setText(String.valueOf(passedProduct.getName()));
+        addProductInvField.setPromptText(String.valueOf(passedProduct.getStock()));
+        addProductInvField.setText(String.valueOf(passedProduct.getStock()));
+        addProductPriceField.setPromptText(String.valueOf(passedProduct.getPrice()));
+        addProductPriceField.setText(String.valueOf(passedProduct.getPrice()));
+        addProductMaxField.setPromptText(String.valueOf(passedProduct.getMax()));
+        addProductMaxField.setText(String.valueOf(passedProduct.getMax()));
+        addProductMinField.setPromptText(String.valueOf(passedProduct.getMin()));
+        addProductMinField.setText(String.valueOf(passedProduct.getMin()));
+        if (passedProduct.getClass().getName().equals("InHouse")) {
+            InHouse ih = (InHouse) passedProduct;
+            addProductMachineIDField.setPromptText(String.valueOf(ih.getMachineID()));
+            addProductMachineIDField.setText(String.valueOf(ih.getMachineID()));
         } else {
-            Outsourced os = (Outsourced) passedPart;
-            addPartMachineIDField.setPromptText(String.valueOf(os.getCompanyName()));
-            addPartMachineIDField.setText(String.valueOf(os.getCompanyName()));
+            Outsourced os = (Outsourced) passedProduct;
+            addProductMachineIDField.setPromptText(String.valueOf(os.getCompanyName()));
+            addProductMachineIDField.setText(String.valueOf(os.getCompanyName()));
         }
     }
 }
