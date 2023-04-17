@@ -3,6 +3,7 @@ package codychoules.application.main;
 
 import codychoules.application.model.*;
 import codychoules.devtools.DevTool;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -45,6 +47,15 @@ public class MainMenuController implements Initializable {
     public TableColumn<Product, Integer> ProductStockCol;
     @FXML
     public TableColumn<Product, Double> ProductPriceCol;
+    @FXML
+    public Button searchPartButton;
+    @FXML
+    public Button searchProductButton;
+    @FXML
+    public TextField searchPartField;
+    @FXML
+    public TextField searchProductField;
+
 
 
     @Override  //Initialization on menu view load
@@ -132,6 +143,18 @@ public class MainMenuController implements Initializable {
     }
 
     public void handleSearchParButton(ActionEvent actionEvent) {
+
+        //Using searchPartField class
+        String searchFieldValue = searchPartField.getText();
+
+        System.out.println("Searching in Parts...");
+
+        //Creating a new parts list to display & replacing the table items with selected items
+        ObservableList<Part> displayedParts = Inventory.searchByPartNameOrID(searchFieldValue);
+        PartTable.setItems(displayedParts);
+
+        System.out.println("Parts displayed");
+
     }
 
     public void handleAddProductButton(ActionEvent actionEvent) throws IOException {
@@ -144,21 +167,79 @@ public class MainMenuController implements Initializable {
         //Sets stage and scene,
         // Needed to set the location, title, & size for the new scene
         Stage modStage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
-        Scene modScene = new Scene(root, 1000,500);
+        Scene modScene = new Scene(root, 1000,700);
 
         modStage.setTitle("Add Product Window");
         modStage.setScene(modScene);
         modStage.show();
 
+        //Part Table Column Initialization
+        PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+        PartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
+        PartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
+        PartTable.setItems(Inventory.getAllParts());
+        DevTool.println("Part Table Set");
+
         DevTool.println("Stage & Scene Set");
     }
 
-    public void handleModProductButton(ActionEvent actionEvent) {
+    public void handleModProductButton(ActionEvent actionEvent) throws IOException {
+        System.out.println("modProductClick");
+
+        //Retrieves the selected product to be modified !!!!TODO needs NUll exception
+        Product select = ProductTable.getSelectionModel().getSelectedItem();
+        ProductMenuController.passSelection(select);
+        if (select == null) {return;}
+        Product selection = Objects.requireNonNull(select);
+
+
+        //Sets loader to target view, loader assignment needed for exhibitB shown below.
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("product-menu-view.fxml")));
+        Parent root = loader.load();
+
+        System.out.println("product selection created: ID: " + selection.getId() + " Name: " + selection.getName());
+
+        //"codychoules/application/main/product-menu-view.fxml"
+
+        //exhibitB: using loader to access ModifyProductController.displayProductInFields method, Needed to keep method non-static
+        ProductMenuController mp = loader.getController(); // must be done after "FXMLLoader.load()" method.
+        mp.displayProductInFields(selection);
+
+        //Sets stage and scene,
+        // Needed to set the location, title, & size for the new scene
+        Stage modStage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Scene modScene = new Scene(root, 1000,700);
+
+        modStage.setTitle("Modify Product Window");
+        modStage.setScene(modScene);
+        modStage.show();
+
+        //Part Table Column Initialization
+        PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+        PartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
+        PartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
+        PartTable.setItems(Inventory.getAllParts());
+        DevTool.println("Part Table Set");
+        DevTool.println("Stage & Scene Set");
+
     }
 
     public void handleDelProductButton(ActionEvent actionEvent) {
     }
 
     public void handleSearchProductButton(ActionEvent actionEvent) {
+
+        //Using searchProductField class
+        String searchFieldValue = searchProductField.getText();
+
+        System.out.println("Searching in Products:");
+
+        //Creating a new products list to display & replacing the table items with selected items
+        ObservableList<Product> displayedProducts = Inventory.searchByProductNameOrID(searchFieldValue);
+        ProductTable.setItems(displayedProducts);
+
+        System.out.println("Products displayed");
     }
 }

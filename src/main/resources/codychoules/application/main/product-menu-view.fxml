@@ -2,20 +2,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.ProductMenuController">
+<AnchorPane prefHeight="620.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.ProductMenuController">
     <children>
-        <RadioButton fx:id="toggleProductInHouseButton" layoutX="210.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickInHouseHandler" selected="true" text="In-House">
-            <toggleGroup>
-                <ToggleGroup fx:id="ProductSourceTG" />
-            </toggleGroup></RadioButton>
-        <RadioButton fx:id="toggleProductOutsourcedButton" layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#clickOutsourcedHandler" text="Outsourced" toggleGroup="$ProductSourceTG" />
         <Text layoutX="120.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" wrappingWidth="90.0" />
         <TextField fx:id="addProductIDField" disable="true" editable="false" focusTraversable="false" layoutX="210.0" layoutY="94.0" onAction="#onTextFieldEnterProduct" opacity="0.6" promptText="(Auto Generated)" />
         <Text layoutX="120.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="90.0" />
@@ -26,19 +24,56 @@
         <TextField fx:id="addProductPriceField" layoutX="210.0" layoutY="200.0" onAction="#onTextFieldEnterProduct" />
         <Text layoutX="120.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max" wrappingWidth="90.0" />
         <TextField fx:id="addProductMaxField" layoutX="210.0" layoutY="235.0" onAction="#onTextFieldEnterProduct" />
-        <Text layoutX="385.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" />
-        <TextField fx:id="addProductMinField" layoutX="414.0" layoutY="235.0" onAction="#onTextFieldEnterProduct" prefHeight="25.0" prefWidth="127.0" />
-        <Text layoutX="75.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Product" wrappingWidth="134.76171875">
+        <Text layoutX="120.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" />
+        <TextField fx:id="addProductMinField" layoutX="208.0" layoutY="268.0" onAction="#onTextFieldEnterProduct" prefHeight="25.0" prefWidth="149.0" />
+        <Text layoutX="115.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Product" wrappingWidth="155.76171875">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Text>
-        <ButtonBar layoutX="361.0" layoutY="260.0" prefHeight="40.0" prefWidth="164.0">
-            <buttons>
-                <Button fx:id="saveAddProductButton" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
-                <Button fx:id="cancelAddProductButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
-            </buttons>
-        </ButtonBar>
+        <ButtonBar layoutX="361.0" layoutY="260.0" prefHeight="40.0" prefWidth="164.0" />
         <Text fx:id="errorText" layoutX="115.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="387.0" />
+          <Button fx:id="saveAddProductButton" layoutX="250.0" layoutY="304.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+          <Button fx:id="cancelAddProductButton" layoutX="300.0" layoutY="304.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
+        <VBox layoutX="407.0" layoutY="7.0" prefHeight="560.0" prefWidth="426.0" spacing="20">
+            <Label text="Part Table" />
+            <TableView fx:id="PartTable" prefHeight="400.0" prefWidth="436.0">
+                <columns>
+                    <TableColumn fx:id="PartIDCol" text="Part ID" />
+                    <TableColumn fx:id="PartNameCol" prefWidth="104.0" text="Part Name" />
+                    <TableColumn fx:id="PartStockCol" prefWidth="123.0" text="Inventory Level" />
+                    <TableColumn fx:id="PartPriceCol" prefWidth="118.0" text="Price/Cost Per Unit" />
+                </columns>
+            </TableView>
+            <HBox spacing="10">
+                <Button fx:id="addPartButton" onAction="#handleAddPartButton" text="Add" />
+                <Button fx:id="modPartButton" onAction="#handleModPartButton" text="Modify" />
+                <Button fx:id="delPartButton" onAction="#handleDelPartButton" text="Delete" />
+                <TextField fx:id="searchPartField" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="156.0" promptText="Search Part by Name or ID" />
+                <Button fx:id="searchPartButton" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="79.0" text="Search" />
+            </HBox>
+         <VBox prefHeight="477.0" prefWidth="426.0" spacing="20">
+            <children>
+               <Label text="Part Table" />
+               <TableView fx:id="associatedPartTable" prefHeight="400.0" prefWidth="436.0">
+                  <columns>
+                     <TableColumn fx:id="associatedPartIDCol" text="Part ID" />
+                     <TableColumn fx:id="associatedPartNameCol" prefWidth="104.0" text="Part Name" />
+                     <TableColumn fx:id="associatedPartStockCol" prefWidth="123.0" text="Inventory Level" />
+                     <TableColumn fx:id="associatedPartPriceCol" prefWidth="118.0" text="Price/Cost Per Unit" />
+                  </columns>
+               </TableView>
+               <HBox spacing="10">
+                  <children>
+                     <Button fx:id="addAssociatedPartButton1" onAction="#handleAddPartButton" text="Add" />
+                     <Button fx:id="modAssociatedPartButton1" onAction="#handleModPartButton" text="Modify" />
+                     <Button fx:id="delAssociatedPartButton1" onAction="#handleDelPartButton" text="Delete" />
+                     <TextField fx:id="searchAssociatedPartField1" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="156.0" promptText="Search Part by Name or ID" />
+                     <Button fx:id="searchAssociatedPartButton1" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="79.0" text="Search" />
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
+        </VBox>
     </children>
 </AnchorPane>

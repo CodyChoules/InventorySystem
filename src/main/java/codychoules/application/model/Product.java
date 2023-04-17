@@ -3,6 +3,8 @@ package codychoules.application.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,6 +29,8 @@ public class Product {
         this.min = min;
         this.max = max;
     }
+
+
 
 
     /**
@@ -137,8 +141,35 @@ public class Product {
     /**
      * @return the associatedParts observableList
      */
-    public ObservableList<Part> getAllAssociatedParts() {
-        return associatedParts;
+    public void setAssociatedParts(ObservableList<Part> associatedParts) {
+        this.associatedParts = associatedParts;
     }
 
+    public void addAssociated(Part part){
+        this.associatedParts.add(part);
+    }
+    public ObservableList<Part> getAllAssociatedParts(){
+        return associatedParts;
+    }
+    //retrieves a list of all AssociatedPartIds in main list for
+    public List<Integer> getAllAssociatedPartIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (Part part : associatedParts) {
+            ids.add(part.getId());
+        }
+        return ids;
+    }
+
+    public Part findAssociatedPartWithPartId(int partId) {
+        Part returnedPart = null;
+//        boolean idDuplicates = false;
+        for (Part part : associatedParts) {
+
+            if (part.getId() == partId) {
+                returnedPart = part;
+            }
+
+        }
+        return returnedPart;
+    }
 }

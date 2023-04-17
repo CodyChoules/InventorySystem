@@ -86,8 +86,21 @@ public class PartMenuController implements Initializable {
             return;
         }
 
+        //TODO Replicate this for product controller
+        //Generates a new ID or if part is being modified, find the part to be replaced with a matching Id.
+        Part replacePart = null;
+        int id = -1;
+        //If adding id is generated.
+        if (addPartIDField.getText().length() == 0){
+            id = Inventory.generateUniqueId(getAllPartIds(), Inventory.nextPartId);}
+        else {
+            replacePart = Inventory.findPartWithPartId(Integer.parseInt(addPartIDField.getText()));
+            DevTool.println("Found partBeingReplaced: " + replacePart.getName());
+            id = Integer.parseInt(addPartIDField.getText());
+        }
+
+
         //Retrieves values from the fields now that they have been validated
-        int id = Inventory.generateUniqueId(getAllPartIds(), Inventory.nextPartId);
         String name = addPartNameField.getText();
         int inv = Integer.parseInt(addPartInvField.getText());
         double price = Double.parseDouble(addPartPriceField.getText());
@@ -113,6 +126,7 @@ public class PartMenuController implements Initializable {
             modingPart = new Outsourced(id, name, price, inv, min, max, supplier);
         }
 
+        Inventory.allParts.remove(replacePart);
         Inventory.allParts.add(modingPart);
 
         //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.

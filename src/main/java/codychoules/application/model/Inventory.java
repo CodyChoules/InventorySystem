@@ -10,6 +10,7 @@ import java.util.List;
 public class Inventory {
 
 
+
     public static ObservableList<Part> allParts = FXCollections.observableArrayList();
 
     public static void add(Part part){
@@ -27,7 +28,30 @@ public class Inventory {
         return ids;
     }
 
+    public static Part findPartWithPartId(int partId) {
+        Part returnedPart = null;
+//        boolean idDuplicates = false;
+        for (Part part : allParts) {
+           //TODO implement this:
+//            if (part == returnedPart) {
+//                DevTool.println(returnedPart.getName() + " ");
+//                idDuplicates = true;
+//            }
+
+            if (part.getId() == partId) {
+                returnedPart = part;
+            }
+
+        }
+//        if (idDuplicates) {
+//            DevTool.println("have been found to have the same ID resulting in data integrity compromise, please remove items with matching id.");
+//            return null;
+//        }
+        return returnedPart;
+    }
+
     public static int nextPartId = 1;
+    public static int nextAssociatedPartId = 1;
     public static int nextProductId = 1;
 
     public static int generateUniqueId(List<Integer> idList, int nextId) {
@@ -59,13 +83,69 @@ public class Inventory {
         return ids;
     }
 
+    public static Product findProductWithProductId(int productId) {
+        Product returnedProduct = null;
+//        boolean idDuplicates = false;
+        for (Product product : allProducts) {
+            //TODO implement this:
+//            if (product == returnedProduct) {
+//                DevTool.println(returnedProduct.getName() + " ");
+//                idDuplicates = true;
+//            }
+
+            if (product.getId() == productId) {
+                returnedProduct = product;
+            }
+
+        }
+
+        return returnedProduct;
+    }
+
+
+    ///////TODO
+    public static ObservableList<Part> allAssociatedParts = FXCollections.observableArrayList();
+
+    public static void addAssociated(Part part){
+        allAssociatedParts.add(part);
+    }
+    public static ObservableList<Part> getAllAssociatedParts(){
+        return allAssociatedParts;
+    }
+    //retrieves a list of all AssociatedPartIds in main list for
+    public static List<Integer> getAllAssociatedPartIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (Part part : allAssociatedParts) {
+            ids.add(part.getId());
+        }
+        return ids;
+    }
+
+    public static Part findAssociatedPartWithPartId(int partId) {
+        Part returnedPart = null;
+//        boolean idDuplicates = false;
+        for (Part part : allAssociatedParts) {
+
+            if (part.getId() == partId) {
+                returnedPart = part;
+            }
+
+        }
+        return returnedPart;
+    }
+    ///////TODO
+
+
     private static boolean testDataInserted;
     public static void addTestData(){
         //checking if addTestData has been run before, so we don't add again on new scene load.
         if (testDataInserted) {
             return;
         }
+
         testDataInserted =true;
+
+
 
         //Creating and adding test data.
         Part part1 = new Outsourced(generateUniqueId(getAllPartIds(),nextPartId), "Bolt", 1, 1, 1, 2,"1");
@@ -80,6 +160,7 @@ public class Inventory {
         for (Part item : getAllParts()) {
             DevTool.println(item.getName());
         }
+
         Product Product1 = new Product(generateUniqueId(getAllProductIds(), nextProductId), "Bolt Assembly", 100.00, 5, 3,4);
         allProducts.add(Product1);
         Product Product2 = new Product(generateUniqueId(getAllProductIds(), nextProductId), "Nut Assembly", 150.00, 3, 3,6);
@@ -87,9 +168,17 @@ public class Inventory {
         Product Product3 = new Product(generateUniqueId(getAllProductIds(),nextProductId), "Screw Assembly", 200.00, 2, 1,5);
         allProducts.add(Product3);
         System.out.println("Test data products added:");
+
         for (Product items : getAllProducts()) {
             System.out.println(items.getName());
         }
+
+        Part associatedPart1 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(),nextAssociatedPartId), "Bolt", 1, 1, 1, 2,"1");
+        addAssociated(associatedPart1);
+        Part associatedPart2 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(),nextAssociatedPartId), "Nut", 1,  1, 1, 2, "sam's CNC");
+        addAssociated(associatedPart2);
+        Part associatedPart3 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(), nextAssociatedPartId), "Screw", 1,  1, 1, 2, "fire forge");
+        addAssociated(associatedPart3);
     }
 
     public static boolean partTextInputCheck(javafx.scene.control.TextField partIDField,
@@ -430,5 +519,59 @@ public class Inventory {
         return true;
     }
 
+    public static ObservableList<Part> searchByPartNameOrID(String partialName){
+        ObservableList<Part> foundParts = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = getAllParts();
+        partialName = partialName.toLowerCase();
+        if (partialName.length() == 0){System.out.println("Search empty, Displaying " + "All Parts");
+            return allParts;
+        }
+        Integer partialInteger = null;
+        try {
+            partialInteger = Integer.parseInt(partialName);
+            System.out.println("Was able to parse integer for search = " +partialInteger);
+        } catch (NumberFormatException e) {
+            System.out.println("Unable to parse integer for search on: " + partialName);
+        }
+        for (Part p: allParts) {
+            Integer ID = p.getId();
+            if (p.getName().toLowerCase().contains(partialName)
+                    || ID.equals(partialInteger)) {
+                foundParts.add(p);
+            }
+        }
+        if (foundParts.size() == 0){System.out.println("No ID or Name found for " +
+                partialName);}
+        return foundParts;
+    }
+
+    public static ObservableList<Product> searchByProductNameOrID(String partialProductName){
+        ObservableList<Product> foundProducts = FXCollections.observableArrayList();
+        ObservableList<Product> allProducts = getAllProducts();
+        partialProductName = partialProductName.toLowerCase();
+        if (partialProductName.length() == 0){System.out.println("Search empty, " +
+                "Displaying" +
+                " " +
+                "All Products");
+            return allProducts;
+        }
+        Integer partialProductInteger = null;
+        try {
+            partialProductInteger = Integer.parseInt(partialProductName);
+            System.out.println("Was able to parse integer for search = " +partialProductInteger);
+        } catch (NumberFormatException e) {
+            System.out.println("Unable to parse integer for search on: " + partialProductName);
+        }
+        for (Product p: allProducts) {
+            Integer ID = p.getId();
+            if (p.getName().toLowerCase().contains(partialProductName)
+                    || ID.equals(partialProductInteger)) {
+                foundProducts.add(p);
+            }
+        }
+        if (foundProducts.size() == 0){System.out.println("No ID or Name found " +
+                "for " + partialProductName);}
+        return foundProducts;
+    }
 
 }
