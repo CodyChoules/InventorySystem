@@ -62,6 +62,8 @@ public class ProductMenuController implements Initializable {
     public void handleCancelButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("Cancel Pressed");
 
+        //!!!!!!
+
         //Retrieve stage & set root to Menu.
         Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
@@ -73,23 +75,24 @@ public class ProductMenuController implements Initializable {
     }
 
     @FXML //handles Save when pressing enter on text feild, For ease of use.
-    public void onTextFieldEnterProduct(ActionEvent actionEvent) {
+    public void onTextFieldEnterProduct(ActionEvent actionEvent) throws IOException {
         DevTool.println("Enter Pressed on Field");
         handleSaveButton(actionEvent);
     }
     @FXML  //handles Save button with saving the product into the product list
-    private void handleSaveButton(ActionEvent actionEvent) {
+    private void handleSaveButton(ActionEvent actionEvent) throws IOException {
 
         DevTool.println("Save Pressed");
 
         //Calls a product method to validate inputs, "errorText" is where the notifications will be sent.
         //TODO need to switch partTextInputCheck to a inputCheck that also works for part
         boolean check = Inventory.partTextInputCheck(
+                addProductNameField,
                 addProductInvField,
                 addProductPriceField,
                 addProductMaxField,
                 addProductMinField,
-//                addProductMachineIDField,
+
                 toggleProductOutsourcedButton,
                 errorText);
         if (!check) {
@@ -131,6 +134,8 @@ public class ProductMenuController implements Initializable {
         //Creation of product instance and parameter placement based on type(concrete class)
         Product modingProduct;
         modingProduct = new Product(id, name, price, inv, min,  max);
+        modingProduct.setAssociatedPartsListIds(productBeingModdedTemp.getAllAssociatedPartIds());
+
 
         Inventory.allProducts.remove(replaceProduct);
         Inventory.allProducts.add(modingProduct);
@@ -139,35 +144,44 @@ public class ProductMenuController implements Initializable {
         errorText.setText("");
 
         DevTool.printProductData(modingProduct);
+        DevTool.println("Number of associated Parts: " + modingProduct.getAllAssociatedPartIds().size());
+
+
+        DevTool.println("Save Pressed");
+
+        //Retrieve stage & set root to Menu.
+        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
+
+        Scene modScene = new Scene(root, 1000, 600);
+        stage.setTitle("Main Menu");
+        stage.setScene(modScene);
+        stage.show();
     }
 
-    int tick = 0;
-    public void clickInHouseHandler(ActionEvent actionEvent) {
-        DevTool.println("In-House Clicked");
-        addMachineIdText.setText("Machine ID");
-        tick++;
-    }
-
-    public void clickOutsourcedHandler(ActionEvent actionEvent) {
-        DevTool.println("Outsourced Clicked");
-        String txt = "Supplier Name";
-        if (tick > 15) {
-            txt = "Make up your mind!";
-        }
-        addMachineIdText.setText(txt);
-    }
-
-    public static Product productBeingModded = null;
+    public static Product productBeingModdedTemp = null;
 
     public static void passSelection(Product selection) {
-        productBeingModded = selection;
+        productBeingModdedTemp = selection;
     }
+
+//    //For testing:
+//    int a = Inventory.generateUniqueId(Inventory.getAllProductIds(),Inventory.nextProductId);
+//    Product testProduct = new Product(  a,
+//            Integer.toString(a),
+//            a,
+//            a,
+//            a,
+//            a);
 
     //TODO Implement mod product functionality
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (productBeingModded != null) {
-            DevTool.println("product" + productBeingModded.getId() + " " + productBeingModded.getName());
+        if (productBeingModdedTemp != null) {
+            DevTool.println("product" + productBeingModdedTemp.getId() + " " + productBeingModdedTemp.getName());
+        } else {
+            DevTool.println("new product being added...");
+            productBeingModdedTemp = new Product(-1,null,-1, -1, -1, -1);
         }
         //Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -177,17 +191,14 @@ public class ProductMenuController implements Initializable {
         PartTable.setItems(Inventory.getAllParts());
         DevTool.println("Part Table Set");
 
-        //TODO Setup Associated test data
-
-
-
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
-        associatedPartTable.setItems(Inventory.getAllAssociatedParts());
+        associatedPartTable.setItems(productBeingModdedTemp.getAllAssociatedParts());//TODO Setup Associated test data
         DevTool.println("Part Table Set");
     }
+
 
 
     public void displayProductInFields(Product passedProduct){
@@ -216,12 +227,36 @@ public class ProductMenuController implements Initializable {
     }
 
     public void handleAddPartButton(ActionEvent actionEvent) {
+        System.out.println("modProductClick");
+
+        //Retrieves the selected product to be modified !!!!TODO needs NUll exception
+        Part select = PartTable.getSelectionModel().getSelectedItem();
+        if (select == null) {return;}
+        int partID = -1;
+        partID = select.getId();
+        productBeingModdedTemp.addAssociatedPartId(partID);
+
+        associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+        associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
+        associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
+        associatedPartTable.setItems(productBeingModdedTemp.getAllAssociatedParts());//TODO Setup Associated test data
+        DevTool.println("Part Table Set");
     }
 
-    public void handleModPartButton(ActionEvent actionEvent) {
-    }
+    public void handleDelAssociatedPartButton(ActionEvent actionEvent) {
+        Part select = associatedPartTable.getSelectionModel().getSelectedItem();
+        if (select == null) {
+            PopupAlert.notSelectedAlert("Part");
+            return;}
 
-    public void handleDelPartButton(ActionEvent actionEvent) {
+        boolean t = PopupAlert.conformationAlert("Parts", "Delete","Do you want to delete this part?");
+        if (t) {
+            Part selection = Objects.requireNonNull(select);
+            productBeingModdedTemp.removeAssociated(select.getId());
+
+            associatedPartTable.setItems(productBeingModdedTemp.getAllAssociatedParts());
+        }
     }
 
     public void handleSearchProductButton(ActionEvent actionEvent) {

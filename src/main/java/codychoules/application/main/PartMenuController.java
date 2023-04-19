@@ -39,13 +39,21 @@ public class PartMenuController implements Initializable {
     public Text errorText;
     @FXML
     public Button saveModPartButton;
+    @FXML
     public TextField addPartIDField;
+    @FXML
     public TextField addPartNameField;
+    @FXML
     public TextField addPartInvField;
+    @FXML
     public TextField addPartPriceField;
+    @FXML
     public TextField addPartMaxField;
+    @FXML
     public TextField addPartMinField;
+    @FXML
     public Text addMachineIdText;
+    @FXML
     public TextField addPartMachineIDField;
 
     @FXML
@@ -63,17 +71,18 @@ public class PartMenuController implements Initializable {
     }
 
     @FXML //handles Save when pressing enter on text feild, For ease of use.
-    public void onTextFieldEnterPart(ActionEvent actionEvent) {
+    public void onTextFieldEnterPart(ActionEvent actionEvent) throws IOException {
         DevTool.println("Enter Pressed on Field");
         handleSaveButton(actionEvent);
     }
     @FXML  //handles Save button with saving the part into the part list
-    private void handleSaveButton(ActionEvent actionEvent) {
+    private void handleSaveButton(ActionEvent actionEvent) throws IOException {
 
         DevTool.println("Save Pressed");
 
         //Calls a part method to validate inputs, "errorText" is where the notifications will be sent.
         boolean check = Inventory.partTextInputCheck(
+                addPartNameField,
                 addPartInvField,
                 addPartPriceField,
                 addPartMaxField,
@@ -133,6 +142,14 @@ public class PartMenuController implements Initializable {
         errorText.setText("");
 
         DevTool.printPartData(modingPart);
+
+        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
+
+        Scene modScene = new Scene(root, 1000, 600);
+        stage.setTitle("Main Menu");
+        stage.setScene(modScene);
+        stage.show();
     }
 
     int tick = 0;

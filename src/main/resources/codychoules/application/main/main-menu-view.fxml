@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -11,23 +10,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codychoules.application.main.MainMenuController">
     <VBox prefHeight="600.0" prefWidth="1000.0">
         <children>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-                <buttons>
-                    <Button fx:id="StyleButton" mnemonicParsing="false" text="Style" />
-                    <ToggleButton fx:id="DarkModeButton" mnemonicParsing="false" text="Dark Mode" />
-                </buttons>
-            </ButtonBar>
-            <HBox alignment="CENTER" prefHeight="600.0" prefWidth="1000.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="INVENTORY MANAGEMENT SYSTEM " wrappingWidth="577.7421875">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Text>
+            <HBox alignment="CENTER" prefHeight="544.0" prefWidth="1000.0">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
 
                 <VBox prefHeight="560.0" prefWidth="426.0" spacing="20">
-                    <Label text="Part Table" />
+                    <Label text="Part Table">
+                  <font>
+                     <Font name="System Bold" size="18.0" />
+                  </font></Label>
                     <TableView fx:id="PartTable" prefHeight="400.0" prefWidth="436.0">
                         <columns>
                             <TableColumn fx:id="PartIDCol" text="Part ID" />
@@ -43,11 +46,15 @@
                         <TextField fx:id="searchPartField" onAction="#handleSearchParButton" prefHeight="25.0" prefWidth="156.0" promptText="Search Part by Name or ID" />
                         <Button fx:id="searchPartButton" onAction="#handleSearchParButton" prefHeight="25.0" prefWidth="79.0" text="Search" />
                     </HBox>
+               <Text fx:id="partTableExceptionText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875" />
                 </VBox>
-                <HBox prefHeight="560.0" prefWidth="77.0" />
+                <HBox prefHeight="535.0" prefWidth="46.0" />
 
                 <VBox prefWidth="411.0" spacing="20">
-                    <Label text="Product Table" />
+                    <Label text="Product Table">
+                  <font>
+                     <Font name="System Bold" size="18.0" />
+                  </font></Label>
                     <TableView fx:id="ProductTable" prefHeight="400.0" prefWidth="411.0">
                         <columns>
                             <TableColumn fx:id="ProductIDCol" text="Product ID" />
@@ -63,9 +70,19 @@
                         <TextField fx:id="searchProductField" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="149.0" promptText="Search Product by Name or ID" />
                         <Button fx:id="searchProductButton" onAction="#handleSearchProductButton" prefHeight="25.0" prefWidth="68.0" text="Search" />
                     </HBox>
+               <Text fx:id="productTableExceptionText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="390.13671875" />
                 </VBox>
+            <HBox prefHeight="535.0" prefWidth="76.0">
+               <children>
+                  <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                             <ToggleButton fx:id="DarkModeButton" lineSpacing="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Dark Mode" />
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Exit" onAction="#handleExitButton" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             </HBox>
         </children>
     </VBox>
 </AnchorPane>
-

@@ -51,7 +51,6 @@ public class Inventory {
     }
 
     public static int nextPartId = 1;
-    public static int nextAssociatedPartId = 1;
     public static int nextProductId = 1;
 
     public static int generateUniqueId(List<Integer> idList, int nextId) {
@@ -103,39 +102,6 @@ public class Inventory {
     }
 
 
-    ///////TODO
-    public static ObservableList<Part> allAssociatedParts = FXCollections.observableArrayList();
-
-    public static void addAssociated(Part part){
-        allAssociatedParts.add(part);
-    }
-    public static ObservableList<Part> getAllAssociatedParts(){
-        return allAssociatedParts;
-    }
-    //retrieves a list of all AssociatedPartIds in main list for
-    public static List<Integer> getAllAssociatedPartIds() {
-        List<Integer> ids = new ArrayList<>();
-        for (Part part : allAssociatedParts) {
-            ids.add(part.getId());
-        }
-        return ids;
-    }
-
-    public static Part findAssociatedPartWithPartId(int partId) {
-        Part returnedPart = null;
-//        boolean idDuplicates = false;
-        for (Part part : allAssociatedParts) {
-
-            if (part.getId() == partId) {
-                returnedPart = part;
-            }
-
-        }
-        return returnedPart;
-    }
-    ///////TODO
-
-
     private static boolean testDataInserted;
     public static void addTestData(){
         //checking if addTestData has been run before, so we don't add again on new scene load.
@@ -167,21 +133,15 @@ public class Inventory {
         allProducts.add(Product2);
         Product Product3 = new Product(generateUniqueId(getAllProductIds(),nextProductId), "Screw Assembly", 200.00, 2, 1,5);
         allProducts.add(Product3);
-        System.out.println("Test data products added:");
+        DevTool.println("Test data products added:");
 
         for (Product items : getAllProducts()) {
-            System.out.println(items.getName());
+            DevTool.println(items.getName());
         }
 
-        Part associatedPart1 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(),nextAssociatedPartId), "Bolt", 1, 1, 1, 2,"1");
-        addAssociated(associatedPart1);
-        Part associatedPart2 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(),nextAssociatedPartId), "Nut", 1,  1, 1, 2, "sam's CNC");
-        addAssociated(associatedPart2);
-        Part associatedPart3 = new Outsourced(generateUniqueId(getAllAssociatedPartIds(), nextAssociatedPartId), "Screw", 1,  1, 1, 2, "fire forge");
-        addAssociated(associatedPart3);
     }
 
-    public static boolean partTextInputCheck(javafx.scene.control.TextField partIDField,
+    public static boolean partTextInputCheckWithID(javafx.scene.control.TextField partIDField,
                                              javafx.scene.control.TextField partInvField,
                                              javafx.scene.control.TextField partPriceField,
                                              javafx.scene.control.TextField partMaxField,
@@ -194,74 +154,74 @@ public class Inventory {
         boolean inputfail = false;
         boolean inputfailminmax = false;
         String ex = "\n";
-        System.out.println("partTextInputCheck started");
+        DevTool.println("partTextInputCheck started");
 
-        if (partIDField.getText().length() != 0) {
+        if (partIDField.getText().trim().length() != 0) {
             try {
                 Integer.parseInt(partIDField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 1 ID");
+                DevTool.println("error 1 ID");
                 inputfail = true;
                 ex = ex.concat("ID is not an integer \n");
             }
         } else {
-            System.out.println("ID blank error");
+            DevTool.println("ID blank error");
             ex = ex.concat("No data in ID field \n");
             inputfail = true;
         }
 
-        if (partInvField.getText().length() != 0) {
+        if (partInvField.getText().trim().length() != 0) {
             try {
                 Integer.parseInt(partInvField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 2 Inv");
+                DevTool.println("error 2 Inv");
                 inputfail = true;
                 ex = ex.concat("Inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Inv blank error");
+            DevTool.println("Inv blank error");
             ex = ex.concat("No data in Inv field \n");
             inputfail = true;
         }
 
-        if (partPriceField.getText().length() != 0) {
+        if (partPriceField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partPriceField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 3 Price");
+                DevTool.println("error 3 Price");
                 inputfail = true;
                 ex = ex.concat("Price is not a double \n");
             }
         } else {
-            System.out.println("Price blank error");
+            DevTool.println("Price blank error");
             ex = ex.concat("No data in Price field \n");
             inputfail = true;
         }
 
-        if (partMaxField.getText().length() != 0) {
+        if (partMaxField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMaxField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 4 max");
+                DevTool.println("error 4 max");
                 inputfail = true;
                 ex = ex.concat("Maximum inventory level is not a integer \n");
             }
         } else {
-            System.out.println("Max blank error");
+            DevTool.println("Max blank error");
             ex = ex.concat("No data in Max field \n");
             inputfail = true;
         }
 
-        if (partMinField.getText().length() != 0) {
+        if (partMinField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMinField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 5 Min");
+                DevTool.println("error 5 Min");
                 inputfail = true;
                 ex = ex.concat("Minimum inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Min blank error");
+            DevTool.println("Min blank error");
             ex = ex.concat("No data in Min field \n");
             inputfail = true;
         }
@@ -269,38 +229,38 @@ public class Inventory {
         if (!inputfailminmax) {
             try {
                 if (Double.parseDouble(partMinField.getText()) > Double.parseDouble(partMaxField.getText())) {
-                    System.out.println("error MIN>MAX");
+                    DevTool.println("error MIN>MAX");
                     inputfail = true;
                     ex = ex.concat("Minimum inventory level cannot be greater than maximum inventory level \n");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("error no min max compare");
+                DevTool.println("error no min max compare");
                 inputfail = true;
             }
         }
         if (!togglePartOutsourcedButton.isSelected()) {
-            if (partMachineIDField.getText().length() != 0) {
+            if (partMachineIDField.getText().trim().length() != 0) {
                 try {
                     int m = Integer.parseInt(partMachineIDField.getText());
                     if (m <= 0){
-                        System.out.println("MachineId must be a positive integer");
+                        DevTool.println("MachineId must be a positive integer");
                         inputfail = true;
                         ex = ex.concat("MachineId must be a positive integer \n");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("error 6 Machine ID");
+                    DevTool.println("error 6 Machine ID");
                     inputfail = true;
                     ex = ex.concat("Machine ID is not an integer \n");
                 }
             } else {
                 inputfail = true;
-                System.out.println("MachineID blank error");
+                DevTool.println("MachineID blank error");
                 ex = ex.concat("No data in MachineID field \n");
             }
         } else {
             if (partMachineIDField.getText().length() == 0) {
                 inputfail = true;
-                System.out.println("Supplier Name blank error");
+                DevTool.println("Supplier Name blank error");
                 ex = ex.concat("No data in Supplier Name field \n");
             }
         }
@@ -312,7 +272,7 @@ public class Inventory {
         return true;
     }
 
-    public static boolean partTextInputCheck(
+    public static boolean partTextInputCheck(javafx.scene.control.TextField partNameField,
                                              javafx.scene.control.TextField partInvField,
                                              javafx.scene.control.TextField partPriceField,
                                              javafx.scene.control.TextField partMaxField,
@@ -325,60 +285,65 @@ public class Inventory {
         boolean inputfail = false;
         boolean inputfailminmax = false;
         String ex = "\n";
-        System.out.println("partTextInputCheck started");
+        DevTool.println("partTextInputCheck started");
+        if (partNameField.getText().trim().length() == 0) {
+            DevTool.println("Name blank error");
+            ex = ex.concat("No data in name field \n");
+            inputfail = true;
+        }
 
-        if (partInvField.getText().length() != 0) {
+        if (partInvField.getText().trim().length() != 0) {
             try {
-                Integer.parseInt(partInvField.getText());
+                Integer.parseInt(partInvField.getText().trim());
             } catch (NumberFormatException e) {
-                System.out.println("error 2 Inv");
+                DevTool.println("error 2 Inv");
                 inputfail = true;
                 ex = ex.concat("Inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Inv blank error");
+            DevTool.println("Inv blank error");
             ex = ex.concat("No data in Inv field \n");
             inputfail = true;
         }
 
-        if (partPriceField.getText().length() != 0) {
+        if (partPriceField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partPriceField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 3 Price");
+                DevTool.println("error 3 Price");
                 inputfail = true;
                 ex = ex.concat("Price is not a double \n");
             }
         } else {
-            System.out.println("Price blank error");
+            DevTool.println("Price blank error");
             ex = ex.concat("No data in Price field \n");
             inputfail = true;
         }
 
-        if (partMaxField.getText().length() != 0) {
+        if (partMaxField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMaxField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 4 max");
+                DevTool.println("error 4 max");
                 inputfail = true;
                 ex = ex.concat("Maximum inventory level is not a integer \n");
             }
         } else {
-            System.out.println("Max blank error");
+            DevTool.println("Max blank error");
             ex = ex.concat("No data in Max field \n");
             inputfail = true;
         }
 
-        if (partMinField.getText().length() != 0) {
+        if (partMinField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMinField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 5 Min");
+                DevTool.println("error 5 Min");
                 inputfail = true;
                 ex = ex.concat("Minimum inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Min blank error");
+            DevTool.println("Min blank error");
             ex = ex.concat("No data in Min field \n");
             inputfail = true;
         }
@@ -386,42 +351,136 @@ public class Inventory {
         if (!inputfailminmax) {
             try {
                 if (Double.parseDouble(partMinField.getText()) > Double.parseDouble(partMaxField.getText())) {
-                    System.out.println("error MIN>MAX");
+                    DevTool.println("error MIN>MAX");
                     inputfail = true;
                     ex = ex.concat("Minimum inventory level cannot be greater than maximum inventory level \n");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("error no min max compare");
+                DevTool.println("error no min max compare");
                 inputfail = true;
             }
         }
         if (!togglePartOutsourcedButton.isSelected()) {
-            if (partMachineIDField.getText().length() != 0) {
+            if (partMachineIDField.getText().trim().length() != 0) {
                 try {
                     int m = Integer.parseInt(partMachineIDField.getText());
                     if (m <= 0){
-                        System.out.println("MachineId must be a positive integer");
+                        DevTool.println("MachineId must be a positive integer");
                         inputfail = true;
                         ex = ex.concat("MachineId must be a positive integer \n");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("error 6 Machine ID");
+                    DevTool.println("error 6 Machine ID");
                     inputfail = true;
                     ex = ex.concat("Machine ID is not an integer \n");
                 }
             } else {
                 inputfail = true;
-                System.out.println("MachineID blank error");
+                DevTool.println("MachineID blank error");
                 ex = ex.concat("No data in MachineID field \n");
             }
         } else {
             if (partMachineIDField.getText().length() == 0) {
                 inputfail = true;
-                System.out.println("Supplier Name blank error");
+                DevTool.println("Supplier Name blank error");
                 ex = ex.concat("No data in Supplier Name field \n");
             }
         }
 
+        if (inputfail) {
+            errorText.setText("Exception:" + ex);
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean partTextInputCheck(javafx.scene.control.TextField partNameField,
+                                             javafx.scene.control.TextField partInvField,
+                                             javafx.scene.control.TextField partPriceField,
+                                             javafx.scene.control.TextField partMaxField,
+                                             javafx.scene.control.TextField partMinField,
+                                             javafx.scene.control.RadioButton togglePartOutsourcedButton,
+                                             javafx.scene.text.Text errorText)
+    {
+        //!!!! why is this underlined
+        boolean inputfail = false;
+        boolean inputfailminmax = false;
+        String ex = "\n";
+        DevTool.println("partTextInputCheck started");
+        if (partNameField.getText().trim().length() == 0) {
+            DevTool.println("Name blank error");
+            ex = ex.concat("No data in name field \n");
+            inputfail = true;
+        }
+
+        if (partInvField.getText().trim().length() != 0) {
+            try {
+                Integer.parseInt(partInvField.getText().trim());
+            } catch (NumberFormatException e) {
+                DevTool.println("error 2 Inv");
+                inputfail = true;
+                ex = ex.concat("Inventory level is not an integer \n");
+            }
+        } else {
+            DevTool.println("Inv blank error");
+            ex = ex.concat("No data in Inv field \n");
+            inputfail = true;
+        }
+
+        if (partPriceField.getText().trim().length() != 0) {
+            try {
+                Double.parseDouble(partPriceField.getText());
+            } catch (NumberFormatException e) {
+                DevTool.println("error 3 Price");
+                inputfail = true;
+                ex = ex.concat("Price is not a double \n");
+            }
+        } else {
+            DevTool.println("Price blank error");
+            ex = ex.concat("No data in Price field \n");
+            inputfail = true;
+        }
+
+        if (partMaxField.getText().trim().length() != 0) {
+            try {
+                Double.parseDouble(partMaxField.getText());
+            } catch (NumberFormatException e) {
+                DevTool.println("error 4 max");
+                inputfail = true;
+                ex = ex.concat("Maximum inventory level is not a integer \n");
+            }
+        } else {
+            DevTool.println("Max blank error");
+            ex = ex.concat("No data in Max field \n");
+            inputfail = true;
+        }
+
+        if (partMinField.getText().trim().length() != 0) {
+            try {
+                Double.parseDouble(partMinField.getText());
+            } catch (NumberFormatException e) {
+                DevTool.println("error 5 Min");
+                inputfail = true;
+                ex = ex.concat("Minimum inventory level is not an integer \n");
+            }
+        } else {
+            DevTool.println("Min blank error");
+            ex = ex.concat("No data in Min field \n");
+            inputfail = true;
+        }
+        //////
+        if (!inputfailminmax) {
+            try {
+                if (Double.parseDouble(partMinField.getText()) > Double.parseDouble(partMaxField.getText())) {
+                    DevTool.println("error MIN>MAX");
+                    inputfail = true;
+                    ex = ex.concat("Minimum inventory level cannot be greater than maximum inventory level \n");
+                }
+            } catch (NumberFormatException e) {
+                DevTool.println("error no min max compare");
+                inputfail = true;
+            }
+        }
         if (inputfail) {
             errorText.setText("Exception:" + ex);
             return false;
@@ -441,60 +500,60 @@ public class Inventory {
         boolean inputfail = false;
         boolean inputfailminmax = false;
         String ex = "\n";
-        System.out.println("partTextInputCheck started");
+        DevTool.println("partTextInputCheck started");
 
-        if (partInvField.getText().length() != 0) {
+        if (partInvField.getText().trim().length() != 0) {
             try {
                 Integer.parseInt(partInvField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 2 Inv");
+                DevTool.println("error 2 Inv");
                 inputfail = true;
                 ex = ex.concat("Inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Inv blank error");
+            DevTool.println("Inv blank error");
             ex = ex.concat("No data in Inv field \n");
             inputfail = true;
         }
 
-        if (partPriceField.getText().length() != 0) {
+        if (partPriceField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partPriceField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 3 Price");
+                DevTool.println("error 3 Price");
                 inputfail = true;
                 ex = ex.concat("Price is not a double \n");
             }
         } else {
-            System.out.println("Price blank error");
+            DevTool.println("Price blank error");
             ex = ex.concat("No data in Price field \n");
             inputfail = true;
         }
 
-        if (partMaxField.getText().length() != 0) {
+        if (partMaxField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMaxField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 4 max");
+                DevTool.println("error 4 max");
                 inputfail = true;
                 ex = ex.concat("Maximum inventory level is not a integer \n");
             }
         } else {
-            System.out.println("Max blank error");
+            DevTool.println("Max blank error");
             ex = ex.concat("No data in Max field \n");
             inputfail = true;
         }
 
-        if (partMinField.getText().length() != 0) {
+        if (partMinField.getText().trim().length() != 0) {
             try {
                 Double.parseDouble(partMinField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("error 5 Min");
+                DevTool.println("error 5 Min");
                 inputfail = true;
                 ex = ex.concat("Minimum inventory level is not an integer \n");
             }
         } else {
-            System.out.println("Min blank error");
+            DevTool.println("Min blank error");
             ex = ex.concat("No data in Min field \n");
             inputfail = true;
         }
@@ -502,12 +561,12 @@ public class Inventory {
         if (!inputfailminmax) {
             try {
                 if (Double.parseDouble(partMinField.getText()) > Double.parseDouble(partMaxField.getText())) {
-                    System.out.println("error MIN>MAX");
+                    DevTool.println("error MIN>MAX");
                     inputfail = true;
                     ex = ex.concat("Minimum inventory level cannot be greater than maximum inventory level \n");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("error no min max compare");
+                DevTool.println("error no min max compare");
                 inputfail = true;
             }
         }
@@ -523,15 +582,15 @@ public class Inventory {
         ObservableList<Part> foundParts = FXCollections.observableArrayList();
         ObservableList<Part> allParts = getAllParts();
         partialName = partialName.toLowerCase();
-        if (partialName.length() == 0){System.out.println("Search empty, Displaying " + "All Parts");
+        if (partialName.length() == 0){DevTool.println("Search empty, Displaying " + "All Parts");
             return allParts;
         }
         Integer partialInteger = null;
         try {
             partialInteger = Integer.parseInt(partialName);
-            System.out.println("Was able to parse integer for search = " +partialInteger);
+            DevTool.println("Was able to parse integer for search = " +partialInteger);
         } catch (NumberFormatException e) {
-            System.out.println("Unable to parse integer for search on: " + partialName);
+            DevTool.println("Unable to parse integer for search on: " + partialName);
         }
         for (Part p: allParts) {
             Integer ID = p.getId();
@@ -540,7 +599,7 @@ public class Inventory {
                 foundParts.add(p);
             }
         }
-        if (foundParts.size() == 0){System.out.println("No ID or Name found for " +
+        if (foundParts.size() == 0){DevTool.println("No ID or Name found for " +
                 partialName);}
         return foundParts;
     }
@@ -549,7 +608,7 @@ public class Inventory {
         ObservableList<Product> foundProducts = FXCollections.observableArrayList();
         ObservableList<Product> allProducts = getAllProducts();
         partialProductName = partialProductName.toLowerCase();
-        if (partialProductName.length() == 0){System.out.println("Search empty, " +
+        if (partialProductName.length() == 0){DevTool.println("Search empty, " +
                 "Displaying" +
                 " " +
                 "All Products");
@@ -558,9 +617,9 @@ public class Inventory {
         Integer partialProductInteger = null;
         try {
             partialProductInteger = Integer.parseInt(partialProductName);
-            System.out.println("Was able to parse integer for search = " +partialProductInteger);
+            DevTool.println("Was able to parse integer for search = " +partialProductInteger);
         } catch (NumberFormatException e) {
-            System.out.println("Unable to parse integer for search on: " + partialProductName);
+            DevTool.println("Unable to parse integer for search on: " + partialProductName);
         }
         for (Product p: allProducts) {
             Integer ID = p.getId();
@@ -569,7 +628,7 @@ public class Inventory {
                 foundProducts.add(p);
             }
         }
-        if (foundProducts.size() == 0){System.out.println("No ID or Name found " +
+        if (foundProducts.size() == 0){DevTool.println("No ID or Name found " +
                 "for " + partialProductName);}
         return foundProducts;
     }

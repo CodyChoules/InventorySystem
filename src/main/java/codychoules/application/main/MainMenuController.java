@@ -3,6 +3,7 @@ package codychoules.application.main;
 
 import codychoules.application.model.*;
 import codychoules.devtools.DevTool;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,11 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -55,7 +54,8 @@ public class MainMenuController implements Initializable {
     public TextField searchPartField;
     @FXML
     public TextField searchProductField;
-
+    public Text productTableExceptionText;
+    public Text partTableExceptionText;
 
 
     @Override  //Initialization on menu view load
@@ -103,7 +103,7 @@ public class MainMenuController implements Initializable {
     }
 
     public void handleModPartButton(ActionEvent actionEvent) throws IOException {
-        System.out.println("modPartClick");
+        DevTool.println("modPartClick");
 
         //Retrieves the selected part to be modified !!!! needs NUll exception
 
@@ -140,6 +140,20 @@ public class MainMenuController implements Initializable {
     }
 
     public void handleDelPartButton(ActionEvent actionEvent) {
+        Part select = PartTable.getSelectionModel().getSelectedItem();
+        if (select == null) {
+            PopupAlert.notSelectedAlert("Part");
+            return;}
+
+        boolean t = PopupAlert.conformationAlert("Parts", "Delete","Do you want to delete this part?");
+        if (t) {
+            Part selection = Objects.requireNonNull(select);
+            Inventory.allParts.remove(selection);
+            PartTable.setItems(Inventory.getAllParts());
+            partTableExceptionText.setText("Part (" + select.getName() + ") has been Deleted.");
+        } else {
+            partTableExceptionText.setText("Delete cancelled.");
+        }
     }
 
     public void handleSearchParButton(ActionEvent actionEvent) {
@@ -227,6 +241,29 @@ public class MainMenuController implements Initializable {
     }
 
     public void handleDelProductButton(ActionEvent actionEvent) {
+
+        Product select = ProductTable.getSelectionModel().getSelectedItem();
+        if (select == null) {
+            PopupAlert.notSelectedAlert("product");
+            return;}
+
+        if (select.getAllAssociatedParts().size() > 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Associated parts are linked to this product, please modify product to have no associated parts before deleting");
+            alert.setTitle("Product");
+            alert.setHeaderText("Product has associated parts!");
+            //return;
+        }
+
+        boolean t = PopupAlert.conformationAlert("Products", "Delete","Do you want to delete this product?");
+        if (t) {
+            Product selection = Objects.requireNonNull(select);
+            Inventory.allProducts.remove(selection);
+            ProductTable.setItems(Inventory.getAllProducts());
+            productTableExceptionText.setText("Product (" + select.getName() + ") has been Deleted.");
+        } else {
+            productTableExceptionText.setText("Delete canceled.");
+        }
+
     }
 
     public void handleSearchProductButton(ActionEvent actionEvent) {
@@ -241,5 +278,10 @@ public class MainMenuController implements Initializable {
         ProductTable.setItems(displayedProducts);
 
         System.out.println("Products displayed");
+    }
+
+    public void handleExitButton(ActionEvent actionEvent) {
+        Platform.exit();
+        System.exit(0);
     }
 }

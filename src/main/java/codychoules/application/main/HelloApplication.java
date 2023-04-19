@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
      *
      * @param stage the primary stage for this application.
      * @throws IOException if the "hello-view.fxml" file cannot be loaded.
-     */
+     */`
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));

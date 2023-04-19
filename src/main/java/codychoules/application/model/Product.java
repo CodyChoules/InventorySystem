@@ -3,7 +3,6 @@ package codychoules.application.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +19,8 @@ public class Product {
     private int stock;
     private int min;
     private int max;
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private List<Integer> associatedPartsList = FXCollections.observableArrayList();
+
     public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
@@ -28,6 +28,7 @@ public class Product {
         this.stock = stock;
         this.min = min;
         this.max = max;
+//        this.associatedPartsList = associatedPartsList;
     }
 
 
@@ -117,21 +118,22 @@ public class Product {
         this.max = max;
     }
 
+
     /**
-     * @param part add part to observable list
+     * @param partId add part to observable list
      */
-    public void addAssociatedPart(Part part){
-        associatedParts.add(part);
+    public void addAssociatedPartId(int partId){
+        this.associatedPartsList.add(partId);
     }
 
     //TODO check javadocs notation after you have reviewed JavaDoc implementation.
     /**
-     * @param  selectedAssociatedPart part to be deleted
+     * @param  selectedAssociatedPartId part to be deleted
      * @return true if part found
      */
-    public Boolean deleteAssociatedPart(Part selectedAssociatedPart){
-        if (associatedParts.contains(selectedAssociatedPart)) {
-            associatedParts.remove(selectedAssociatedPart);
+    public Boolean deleteAssociatedPart(int selectedAssociatedPartId){
+        if (associatedPartsList.contains(selectedAssociatedPartId)) {
+            associatedPartsList.remove(selectedAssociatedPartId);
             return true;
         } else {
             return false;
@@ -139,37 +141,70 @@ public class Product {
     }
 
     /**
-     * @return the associatedParts observableList
+     * @return the associatedPartsList observableList
      */
-    public void setAssociatedParts(ObservableList<Part> associatedParts) {
-        this.associatedParts = associatedParts;
+    public void setAssociatedPartsListIds(List<Integer> associatedPartsList) {
+        this.associatedPartsList = associatedPartsList;
     }
 
-    public void addAssociated(Part part){
-        this.associatedParts.add(part);
+    //TODO Duplicatevv
+    public void addAssociated(int part){
+        this.associatedPartsList.add(part);
     }
+
+    public void removeAssociated(int part){
+        for (int i = 0; i <= this.associatedPartsList.toArray().length; i++){
+            if (this.associatedPartsList.get(i) == part){
+                this.associatedPartsList.remove(i);
+                return;
+            }
+        }
+    }
+
+    //Note: dependent on Inventory.allParts
     public ObservableList<Part> getAllAssociatedParts(){
-        return associatedParts;
+        ObservableList<Part> partList =  FXCollections.observableArrayList();
+        for (Integer partId : associatedPartsList) {
+            for (Part part : Inventory.allParts) {
+                if (part.getId() == partId){
+                    partList.add(part);
+                }
+            }
+        }
+        return partList;
     }
+
+
+
     //retrieves a list of all AssociatedPartIds in main list for
     public List<Integer> getAllAssociatedPartIds() {
-        List<Integer> ids = new ArrayList<>();
-        for (Part part : associatedParts) {
-            ids.add(part.getId());
-        }
-        return ids;
+        return associatedPartsList;
     }
 
-    public Part findAssociatedPartWithPartId(int partId) {
-        Part returnedPart = null;
-//        boolean idDuplicates = false;
-        for (Part part : associatedParts) {
-
-            if (part.getId() == partId) {
-                returnedPart = part;
-            }
-
-        }
-        return returnedPart;
-    }
+//    public Part findAssociatedPartWithPartId(int partId) {
+//        Part returnedPart = null;
+////        boolean idDuplicates = false;
+//        for (int associatedPartId: associatedPartsList) {
+//            for (Part part : Inventory.allParts) {
+//                if (part.getId() == partId){
+//                    partList.add(part);
+//                }
+//            }
+//
+//        }
+//        return returnedPart;
+//    }
+//
+//    public Part findAssociatedPartWithPartName(int partId) {
+//        Part returnedPart = null;
+////        boolean idDuplicates = false;
+//        for (int partId: associatedPartsList) {
+//
+//            if (part.getId() == partId) {
+//                returnedPart = part;
+//            }
+//
+//        }
+//        return returnedPart;
+//    }
 }
