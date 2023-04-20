@@ -1,6 +1,5 @@
 package codychoules.application.main;
 
-
 import codychoules.application.model.*;
 import codychoules.devtools.DevTool;
 import javafx.application.Platform;
@@ -16,14 +15,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-
+/**
+ * The controller class for the main menu view of the Inventory System application.
+ *
+ * @author Cody Choules
+ */
 public class MainMenuController implements Initializable {
 
     @FXML
@@ -54,18 +55,25 @@ public class MainMenuController implements Initializable {
     public TextField searchPartField;
     @FXML
     public TextField searchProductField;
+    @FXML
     public Text productTableExceptionText;
+    @FXML
     public Text partTableExceptionText;
 
-
-    @Override  //Initialization on menu view load
+    /**
+     * Initializes the main menu view.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         DevTool.println("Control Initialization Start...");
 
-        //adding test data
+        // Adding test data
         Inventory.addTestData();
 
-        //Part Table Column Initialization
+        // Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         PartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
@@ -73,7 +81,7 @@ public class MainMenuController implements Initializable {
         PartTable.setItems(Inventory.getAllParts());
         DevTool.println("Part Table Set");
 
-        //Product Table Column Initialization
+        // Product Table Column Initialization
         ProductIDCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
         ProductNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         ProductStockCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
@@ -82,7 +90,14 @@ public class MainMenuController implements Initializable {
         DevTool.println("Product Table Set");
 
     }
+    //@@@@@@@
 
+    /**
+     * Handles the event when the "Add" button is clicked in part table.
+     *
+     * @param actionEvent The ActionEvent object: button click event.
+     * @throws IOException If an I/O error occurs.
+     */
     public void handleAddPartButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("addPartClick");
         //Sets root to view,
@@ -102,6 +117,12 @@ public class MainMenuController implements Initializable {
         DevTool.println("Stage & Scene Set");
     }
 
+    /**
+     * Handles the event when the "Modify" button is clicked in part table.
+     *
+     * @param actionEvent The ActionEvent object representing the button click event.
+     * @throws IOException If an I/O error occurs.
+     */
     public void handleModPartButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("modPartClick");
 
@@ -118,7 +139,6 @@ public class MainMenuController implements Initializable {
         Parent root = loader.load();
 
         System.out.println("part selection created: ID: " + selection.getId() + " Name: " + selection.getName());
-
         //"codychoules/application/main/part-menu-view.fxml"
 
         //exhibitB: using loader to access ModifyProductController.displayPartInFields method, Needed to keep method non-static
@@ -139,6 +159,11 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /**
+     * Handles the event when the "Delete" button is clicked in part table.
+     *
+     * @param actionEvent The ActionEvent object representing the button click event.
+     */
     public void handleDelPartButton(ActionEvent actionEvent) {
         Part select = PartTable.getSelectionModel().getSelectedItem();
         if (select == null) {
@@ -156,6 +181,11 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Handles the search button action event for searching parts.
+     *
+     * @param actionEvent The ActionEvent object representing the event triggered by the search button
+     */
     public void handleSearchParButton(ActionEvent actionEvent) {
 
         //Using searchPartField class
@@ -171,6 +201,12 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /**
+     * Handles the event when the "Add" button is clicked in product table.
+     *
+     * @param actionEvent The ActionEvent object representing the event.
+     * @throws IOException If an I/O exception occurs while loading the FXML file.
+     */
     public void handleAddProductButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("addProductClick");
         //Sets root to view,
@@ -198,6 +234,12 @@ public class MainMenuController implements Initializable {
         DevTool.println("Stage & Scene Set");
     }
 
+    /**
+     * Handles the event when the Modify Product button is clicked.
+     *
+     * @param actionEvent The ActionEvent object representing the event.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
     public void handleModProductButton(ActionEvent actionEvent) throws IOException {
         System.out.println("modProductClick");
 
@@ -240,22 +282,33 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /**
+     * Handles the "Delete Product" button action event.
+     *
+     * @param actionEvent The action event triggered by the "Delete Product" button
+     */
     public void handleDelProductButton(ActionEvent actionEvent) {
 
+        // Get the selected product from the product table
         Product select = ProductTable.getSelectionModel().getSelectedItem();
         if (select == null) {
+            // Show an alert if no product is selected
             PopupAlert.notSelectedAlert("product");
-            return;}
+            return;
+        }
 
         if (select.getAllAssociatedParts().size() > 0) {
+            // Show an error alert if the selected product has associated parts
             Alert alert = new Alert(Alert.AlertType.ERROR, "Associated parts are linked to this product, please modify product to have no associated parts before deleting");
             alert.setTitle("Product");
             alert.setHeaderText("Product has associated parts!");
             //return;
         }
 
-        boolean t = PopupAlert.conformationAlert("Products", "Delete","Do you want to delete this product?");
+        // Show a confirmation alert for deleting the selected product
+        boolean t = PopupAlert.conformationAlert("Products", "Delete", "Do you want to delete this product?");
         if (t) {
+            // Delete the selected product from the allProducts list and update the product table
             Product selection = Objects.requireNonNull(select);
             Inventory.allProducts.remove(selection);
             ProductTable.setItems(Inventory.getAllProducts());
@@ -266,20 +319,30 @@ public class MainMenuController implements Initializable {
 
     }
 
+    /**
+     * Handles the event when the "Search Product" button is clicked.
+     *
+     * @param actionEvent The action event object generated by the button click
+     */
     public void handleSearchProductButton(ActionEvent actionEvent) {
 
-        //Using searchProductField class
+        // Using searchProductField class
         String searchFieldValue = searchProductField.getText();
 
         System.out.println("Searching in Products:");
 
-        //Creating a new products list to display & replacing the table items with selected items
+        // Creating a new products list to display & replacing the table items with selected items
         ObservableList<Product> displayedProducts = Inventory.searchByProductNameOrID(searchFieldValue);
         ProductTable.setItems(displayedProducts);
 
         System.out.println("Products displayed");
     }
 
+    /**
+     * Handles the event when the "Exit" button is clicked.
+     *
+     * @param actionEvent The action event object generated by the button click
+     */
     public void handleExitButton(ActionEvent actionEvent) {
         Platform.exit();
         System.exit(0);

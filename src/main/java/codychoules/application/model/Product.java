@@ -126,7 +126,7 @@ public class Product {
         this.associatedPartsList.add(partId);
     }
 
-    //TODO check javadocs notation after you have reviewed JavaDoc implementation.
+
     /**
      * @param  selectedAssociatedPartId part to be deleted
      * @return true if part found
@@ -141,17 +141,20 @@ public class Product {
     }
 
     /**
-     * @return the associatedPartsList observableList
+     * @param associatedPartsList the associatedPartsList observableList
      */
     public void setAssociatedPartsListIds(List<Integer> associatedPartsList) {
         this.associatedPartsList = associatedPartsList;
     }
 
-    //TODO Duplicatevv
+   //TODO must use add Associated over add to institiat
     public void addAssociated(int part){
         this.associatedPartsList.add(part);
     }
 
+    /**
+     * @param part the part to be removed from the associatedList
+     */
     public void removeAssociated(int part){
         for (int i = 0; i <= this.associatedPartsList.toArray().length; i++){
             if (this.associatedPartsList.get(i) == part){
@@ -161,10 +164,14 @@ public class Product {
         }
     }
 
-    //Note: dependent on Inventory.allParts
+    /** Method to return the Associated parts as a list of parts opposed to a list of IDs.
+     * Note: dependent on Inventory.allParts
+     *
+     * @return ObservableList<Part> associated part list
+     */
     public ObservableList<Part> getAllAssociatedParts(){
         ObservableList<Part> partList =  FXCollections.observableArrayList();
-        for (Integer partId : associatedPartsList) {
+        for (Integer partId : this.associatedPartsList) {
             for (Part part : Inventory.allParts) {
                 if (part.getId() == partId){
                     partList.add(part);
@@ -176,7 +183,11 @@ public class Product {
 
 
 
-    //retrieves a list of all AssociatedPartIds in main list for
+
+    /** Retrieves a list of all AssociatedPartIds as a list of IDs
+    *
+    * @return ObservableList<Part> associated part list
+    */
     public List<Integer> getAllAssociatedPartIds() {
         return associatedPartsList;
     }

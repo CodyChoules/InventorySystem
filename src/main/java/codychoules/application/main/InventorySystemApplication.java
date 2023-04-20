@@ -10,26 +10,43 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The main class for the Inventory System application.
+ *
+ * @author Cody Choules
+ */
 public class InventorySystemApplication extends Application {
 
-
+    /**
+     * The entry point for the JavaFX application.
+     *
+     * @param primaryStage The primary stage for the application.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws IOException {
 
-        //assign root of scene, title, and define size.
+        // Assign root of scene, title, and define size.
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
         primaryStage.setTitle("Main Menu");
         Scene scene = new Scene(root, 1000, 600);
 
-        //Development tool to center stage on mouse cursor for ease of use in testing, Needed here before scene set & after scene size.
+        // Development tool to center stage on mouse cursor for ease of use in testing, Needed here before scene set & after scene size.
         DevTool.setWindowCenteredOnCursor(scene,primaryStage);
 
-        //Set and show stage.
+        // Set and show stage.
         primaryStage.setScene(scene);
         primaryStage.show();
 
         DevTool.println("Stage & Scene Set");
     }
 
-    public static void main(String[] args) {launch();}
+    /**
+     * The main method for launching the Inventory System application.
+     *
+     * @param args The command line arguments.
+     */
+    public static void main(String[] args) {
+        launch();
+    }
 }

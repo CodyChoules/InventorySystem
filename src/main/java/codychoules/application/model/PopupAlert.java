@@ -10,29 +10,19 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Class for displaying popup alerts.
+ */
 public class PopupAlert  {
 
-//    /**
-//     * Constructor for creating a warning pop-up dialog with a customizable message.
-//     *
-//     * @param message The warning message to be displayed in the dialog.
-//     */
-//    public Popup(String message) {
-//        super(AlertType.CONFIRMATION);
-//        setTitle("Warning");
-//        setHeaderText(null);
-//        setContentText(message);
-//        getButtonTypes().setAll(ButtonType.OK);
-//    }
-//
-//    public static
-//    /**
-//     * Method to show the warning pop-up dialog.
-//     */
-//    public void showPopup() {
-//        this.showAndWait();
-//    }
-
+    /**
+     * Displays a confirmation alert dialog with the specified title, header, and description.
+     *
+     * @param title       The title of the confirmation alert.
+     * @param header      The header text of the confirmation alert.
+     * @param discription The description text of the confirmation alert.
+     * @return  if the user clicked OK as true or if not as false.
+     */
     public static boolean conformationAlert(String title, String header, String discription) {
         Alert alert = new Alert(AlertType.CONFIRMATION, discription);
         alert.setTitle(title);
@@ -43,12 +33,12 @@ public class PopupAlert  {
         return result.isPresent() && result.get() == ButtonType.OK;
 
     }
-//Implementation:
-//        boolean t = Popup.testAlert();
-//        if (t) {
-//            DevTool.println("Replace this print with the feature you want done on OK");
-//        }
 
+    /**
+     * Displays a warning alert dialog indicating that a target must be selected.
+     *
+     * @param target The target type that must be selected.
+     */
     public static void notSelectedAlert(String target) {
         Alert alert = new Alert(AlertType.NONE, "test");
 

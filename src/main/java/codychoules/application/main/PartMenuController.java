@@ -25,20 +25,22 @@ import java.util.ResourceBundle;
 import static codychoules.application.model.Inventory.getAllPartIds;
 import static codychoules.application.model.Inventory.getAllProductIds;
 
+/**
+ * The PartMenuController is the controller class for the PartMenu.
+ * It implements the Initialize interface for JavaFX to perform initialization tasks.
+ *
+ * @author Cody Choules
+ */
 public class PartMenuController implements Initializable {
-    //!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
+    //TODO!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
 
     //FXML Declarations
-    @FXML
-    public Button cancelModPartButton;
     @FXML
     public RadioButton togglePartOutsourcedButton;
     @FXML
     public RadioButton togglePartInHouseButton;
     @FXML
     public Text errorText;
-    @FXML
-    public Button saveModPartButton;
     @FXML
     public TextField addPartIDField;
     @FXML
@@ -56,25 +58,51 @@ public class PartMenuController implements Initializable {
     @FXML
     public TextField addPartMachineIDField;
 
+    /**
+     * Handles the cancel button action event.
+     *
+     * @param actionEvent The action event triggered by the cancel button
+     * @throws IOException If an I/O error occurs during loading of the main menu view
+     */
     @FXML
     public void handleCancelButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("Cancel Pressed");
 
-        //Retrieve stage & set root to Menu.
-        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        // Retrieve stage & set root to Menu.
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+
+        // Load the main menu view using FXMLLoader
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
 
+        // Create a new scene with the loaded root and set it to the stage
         Scene modScene = new Scene(root, 1000, 600);
         stage.setTitle("Main Menu");
         stage.setScene(modScene);
         stage.show();
     }
 
-    @FXML //handles Save when pressing enter on text feild, For ease of use.
+
+    /**
+     * Handles the event when the "Enter" key is pressed on a text field,
+     * triggering the "Save" button functionality, for ease of use.
+     *
+     * @param actionEvent The ActionEvent associated with the "Enter" key press.
+     * @throws IOException If an I/O error occurs during the handling of the event.
+     */
+    @FXML
     public void onTextFieldEnterPart(ActionEvent actionEvent) throws IOException {
         DevTool.println("Enter Pressed on Field");
         handleSaveButton(actionEvent);
     }
+
+    /**
+     * Handles Save button with saving the part into the part list. This also finalizes
+     * all the changes made to the part and adds or replaces the part int the part list. In addition
+     * this parses and check all text fields using the Inventory.partTextInputCheck method.
+     *
+     * @param actionEvent The ActionEvent associated with the "Save" button press.
+     * @throws IOException If an I/O error occurs during the handling of the event.
+     */
     @FXML  //handles Save button with saving the part into the part list
     private void handleSaveButton(ActionEvent actionEvent) throws IOException {
 
@@ -95,7 +123,6 @@ public class PartMenuController implements Initializable {
             return;
         }
 
-        //TODO Replicate this for product controller
         //Generates a new ID or if part is being modified, find the part to be replaced with a matching Id.
         Part replacePart = null;
         int id = -1;
@@ -153,23 +180,42 @@ public class PartMenuController implements Initializable {
     }
 
     int tick = 0;
+    /**
+     * This method handles the "In-House" button click event.
+     *
+     * @param actionEvent The action event triggered by the "In-House" button
+     */
     public void clickInHouseHandler(ActionEvent actionEvent) {
-        DevTool.println("In-House Clicked");
-        addMachineIdText.setText("Machine ID");
-        tick++;
+        DevTool.println("In-House Clicked"); // Output message to console
+        addMachineIdText.setText("Machine ID"); // Set text for a UI element
+        tick++; // Increment tick counter
     }
 
+    /**
+     * Handles the action event for the "Outsourced" toggle button click.
+     *
+     * @param actionEvent The action event object triggered by the button click.
+     */
     public void clickOutsourcedHandler(ActionEvent actionEvent) {
         DevTool.println("Outsourced Clicked");
+
         String txt = "Supplier Name";
         if (tick > 15) {
-            txt = "Make up your mind!";
+            txt = "Make up your mind!"; //Something for the bunny.
         }
+
+        // Set the text of the "addMachineIdText" field
         addMachineIdText.setText(txt);
     }
 
+
     public static Part partBeingModded = null;
 
+    /**
+     * This method sets the currently selected 'Part' to be modified.
+     * Its is used to pass the information form the Main Menu to here.
+     * @param selection The 'Part' object that represents the selected part.
+     */
     public static void passSelection(Part selection) {
         partBeingModded = selection;
     }
@@ -182,7 +228,11 @@ public class PartMenuController implements Initializable {
         }
     }
 
-
+    /**
+     * A method to display the details of a Part object in fields.
+     * This is used for modifying a part by showing the current values of a current part.
+     * @param passedPart The Part object whose details are to be displayed.
+     */
     public void displayPartInFields(Part passedPart){
 
         addPartIDField.setPromptText(String.valueOf(passedPart.getId()));
@@ -197,8 +247,7 @@ public class PartMenuController implements Initializable {
         addPartMaxField.setText(String.valueOf(passedPart.getMax()));
         addPartMinField.setPromptText(String.valueOf(passedPart.getMin()));
         addPartMinField.setText(String.valueOf(passedPart.getMin()));
-        if (passedPart.getClass().getName().equals("InHouse")) {
-            InHouse ih = (InHouse) passedPart;
+        if (passedPart instanceof InHouse ih) {
             addPartMachineIDField.setPromptText(String.valueOf(ih.getMachineID()));
             addPartMachineIDField.setText(String.valueOf(ih.getMachineID()));
         } else {
