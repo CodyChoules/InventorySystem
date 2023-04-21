@@ -71,7 +71,7 @@ public class MainMenuController implements Initializable {
         DevTool.println("Control Initialization Start...");
 
         // Adding test data
-        Inventory.addTestData();
+        InventoryUtility.addTestData();
 
         // Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -173,7 +173,7 @@ public class MainMenuController implements Initializable {
         boolean t = PopupAlert.conformationAlert("Parts", "Delete","Do you want to delete this part?");
         if (t) {
             Part selection = Objects.requireNonNull(select);
-            Inventory.allParts.remove(selection);
+            Inventory.deletePart(selection);
             PartTable.setItems(Inventory.getAllParts());
             partTableExceptionText.setText("Part (" + select.getName() + ") has been Deleted.");
         } else {
@@ -194,7 +194,7 @@ public class MainMenuController implements Initializable {
         System.out.println("Searching in Parts...");
 
         //Creating a new parts list to display & replacing the table items with selected items
-        ObservableList<Part> displayedParts = Inventory.searchByPartNameOrID(searchFieldValue);
+        ObservableList<Part> displayedParts = Inventory.lookupPart(searchFieldValue);
         PartTable.setItems(displayedParts);
 
         System.out.println("Parts displayed");
@@ -245,7 +245,9 @@ public class MainMenuController implements Initializable {
 
         //Retrieves the selected product to be modified !!!!TODO needs NUll exception
         Product select = ProductTable.getSelectionModel().getSelectedItem();
-        ProductMenuController.passSelection(select);
+
+
+     //   ProductMenuController.passSelection(select);
         if (select == null) {return;}
         Product selection = Objects.requireNonNull(select);
 
@@ -260,6 +262,7 @@ public class MainMenuController implements Initializable {
 
         //exhibitB: using loader to access ModifyProductController.displayProductInFields method, Needed to keep method non-static
         ProductMenuController mp = loader.getController(); // must be done after "FXMLLoader.load()" method.
+        mp.passSelection(select);
         mp.displayProductInFields(selection);
 
         //Sets stage and scene,
@@ -310,7 +313,7 @@ public class MainMenuController implements Initializable {
         if (t) {
             // Delete the selected product from the allProducts list and update the product table
             Product selection = Objects.requireNonNull(select);
-            Inventory.allProducts.remove(selection);
+            Inventory.deleteProduct(selection);
             ProductTable.setItems(Inventory.getAllProducts());
             productTableExceptionText.setText("Product (" + select.getName() + ") has been Deleted.");
         } else {
@@ -332,7 +335,7 @@ public class MainMenuController implements Initializable {
         System.out.println("Searching in Products:");
 
         // Creating a new products list to display & replacing the table items with selected items
-        ObservableList<Product> displayedProducts = Inventory.searchByProductNameOrID(searchFieldValue);
+        ObservableList<Product> displayedProducts = Inventory.lookupProduct(searchFieldValue);
         ProductTable.setItems(displayedProducts);
 
         System.out.println("Products displayed");

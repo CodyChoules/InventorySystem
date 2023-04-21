@@ -19,7 +19,7 @@ public class Product {
     private int stock;
     private int min;
     private int max;
-    private List<Integer> associatedPartsList = FXCollections.observableArrayList();
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
@@ -120,20 +120,19 @@ public class Product {
 
 
     /**
-     * @param partId add part to observable list
+     * @param part add associated part to list
      */
-    public void addAssociatedPartId(int partId){
-        this.associatedPartsList.add(partId);
+    public void addAssociatedParts(Part part){
+        this.associatedParts.add(part);
     }
 
-
     /**
-     * @param  selectedAssociatedPartId part to be deleted
-     * @return true if part found
+     * @param part remove associated part to list
+     * @return asdfasdf
      */
-    public Boolean deleteAssociatedPart(int selectedAssociatedPartId){
-        if (associatedPartsList.contains(selectedAssociatedPartId)) {
-            associatedPartsList.remove(selectedAssociatedPartId);
+    public boolean deleteAssociatedParts(Part part){
+        if (this.associatedParts.contains(part)) {
+            this.associatedParts.remove(part);
             return true;
         } else {
             return false;
@@ -141,81 +140,19 @@ public class Product {
     }
 
     /**
-     * @param associatedPartsList the associatedPartsList observableList
+     * @return the list of associated parts
      */
-    public void setAssociatedPartsListIds(List<Integer> associatedPartsList) {
-        this.associatedPartsList = associatedPartsList;
-    }
-
-   //TODO must use add Associated over add to institiat
-    public void addAssociated(int part){
-        this.associatedPartsList.add(part);
+    public ObservableList<Part> getAllAssociatedParts(){
+        return this.associatedParts;
     }
 
     /**
-     * @param part the part to be removed from the associatedList
+     * @param parts sets the associated parts list
      */
-    public void removeAssociated(int part){
-        for (int i = 0; i <= this.associatedPartsList.toArray().length; i++){
-            if (this.associatedPartsList.get(i) == part){
-                this.associatedPartsList.remove(i);
-                return;
-            }
-        }
-    }
-
-    /** Method to return the Associated parts as a list of parts opposed to a list of IDs.
-     * Note: dependent on Inventory.allParts
-     *
-     * @return ObservableList<Part> associated part list
-     */
-    public ObservableList<Part> getAllAssociatedParts(){
-        ObservableList<Part> partList =  FXCollections.observableArrayList();
-        for (Integer partId : this.associatedPartsList) {
-            for (Part part : Inventory.allParts) {
-                if (part.getId() == partId){
-                    partList.add(part);
-                }
-            }
-        }
-        return partList;
+    public void setAllAssociatedParts(ObservableList<Part> parts){
+        this.associatedParts = parts;
     }
 
 
 
-
-    /** Retrieves a list of all AssociatedPartIds as a list of IDs
-    *
-    * @return ObservableList<Part> associated part list
-    */
-    public List<Integer> getAllAssociatedPartIds() {
-        return associatedPartsList;
-    }
-
-//    public Part findAssociatedPartWithPartId(int partId) {
-//        Part returnedPart = null;
-////        boolean idDuplicates = false;
-//        for (int associatedPartId: associatedPartsList) {
-//            for (Part part : Inventory.allParts) {
-//                if (part.getId() == partId){
-//                    partList.add(part);
-//                }
-//            }
-//
-//        }
-//        return returnedPart;
-//    }
-//
-//    public Part findAssociatedPartWithPartName(int partId) {
-//        Part returnedPart = null;
-////        boolean idDuplicates = false;
-//        for (int partId: associatedPartsList) {
-//
-//            if (part.getId() == partId) {
-//                returnedPart = part;
-//            }
-//
-//        }
-//        return returnedPart;
-//    }
 }

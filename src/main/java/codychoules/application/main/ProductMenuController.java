@@ -2,6 +2,7 @@ package codychoules.application.main;
 
 import codychoules.application.model.*;
 import codychoules.devtools.DevTool;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static codychoules.application.model.Inventory.getAllProductIds;
+
 /**
  * This class represents a controller for managing the product menu.
  * This can be used for both modifying and adding products.
@@ -71,6 +72,10 @@ public class ProductMenuController implements Initializable {
     @FXML
     public TableColumn<Part, Double> associatedPartPriceCol;
 
+    public    Product productBeingModded = null;
+    public  ObservableList<Part> associatedPartsBeingModded = FXCollections.observableArrayList();
+    private static int selectedProdIndex;
+
     /**
      * Handles the cancel button action event.
      *
@@ -106,7 +111,7 @@ public class ProductMenuController implements Initializable {
 
     /**
      * Handles Save button with saving the product into product list. This also finalizes
-     * all the changes made to the product and adds or replaces the product int the product list. In addition
+     * all the changes made to the product and adds or replaces the product int the product list. In addition,
      * this parses and check all text fields using the Inventory.partTextInputCheck method.
      *
      * @param actionEvent The ActionEvent associated with the "Save" button press.
@@ -118,29 +123,28 @@ public class ProductMenuController implements Initializable {
         DevTool.println("Save Pressed");
 
         // Calls a product method to validate inputs, "errorText" is where the notifications will be sent.
-        //TODO need to switch partTextInputCheck to a inputCheck that also works for part
-        boolean check = Inventory.partTextInputCheck(
+        boolean check = InventoryUtility.textFieldCheck(
                 addProductNameField,
                 addProductInvField,
                 addProductPriceField,
                 addProductMaxField,
                 addProductMinField,
-
-                toggleProductOutsourcedButton,
                 errorText);
         if (!check) {
             //Prevents invalid data from being saved
             return;
         }
 
-        // Generates a new ID or if product is being modified, find the product  to be replaced with a matching Id.
+        // Generates a new ID or if product is being modified, find the product  to be replaced with a matching ID.
         Product replaceProduct = null;
+        int replaceProductIndex = -1;
         int id = -1;
         // If adding id is generated.
         if (addProductIDField.getText().length() == 0){
-            id = Inventory.generateUniqueId(getAllProductIds(), Inventory.nextProductId);}
+            id = InventoryUtility.generateUniqueId(InventoryUtility.getAllProductIds(), InventoryUtility.nextProductId);}
         else {
             replaceProduct = Inventory.findProductWithProductId(Integer.parseInt(addProductIDField.getText()));
+            replaceProductIndex = Inventory.getAllProducts().indexOf(replaceProduct);
             DevTool.println("Found product BeingReplaced: " + replaceProduct.getName());
             id = Integer.parseInt(addProductIDField.getText());
         }
@@ -156,17 +160,19 @@ public class ProductMenuController implements Initializable {
         // Creation of product instance and parameter placement based on type(concrete class)
         Product modingProduct;
         modingProduct = new Product(id, name, price, inv, min,  max);
-        modingProduct.setAssociatedPartsListIds(productBeingModdedTemp.getAllAssociatedPartIds());
+        modingProduct.setAllAssociatedParts(associatedPartsBeingModded);
 
-
-        Inventory.allProducts.remove(replaceProduct);
-        Inventory.allProducts.add(modingProduct);
+        if (replaceProduct == null){
+            Inventory.addProduct(modingProduct);
+        } else {
+            Inventory.updateProduct(selectedProdIndex, modingProduct);
+        }
 
         // Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
 
         DevTool.printProductData(modingProduct);
-        DevTool.println("Number of associated Parts: " + modingProduct.getAllAssociatedPartIds().size());
+        DevTool.println("Number of associated Parts: " + modingProduct.getAllAssociatedParts().size());
 
 
         DevTool.println("Save Pressed");
@@ -181,19 +187,33 @@ public class ProductMenuController implements Initializable {
         stage.show();
     }
 
-
-    public  static  Product productBeingModded = null;
-    public static Product productBeingModdedTemp = null;
-
     /**
      * This method handles the passing of the attributes from the selected object into this controller.
      *
      * @param selection the product provided by the Main menu selection.
      */
-    public static void passSelection(Product selection) {
+    public  void passSelection(Product selection) {
         productBeingModded = selection;
+        selectedProdIndex = Inventory.getAllProducts().indexOf(selection);
 
-        //productBeingModdedTemp.setAssociatedPartsListIds(productBeingModded.getAllAssociatedPartIds());
+        addProductIDField.setPromptText(String.valueOf(selection.getId()));
+        addProductIDField.setText(String.valueOf(selection.getId()));
+        addProductNameField.setPromptText(String.valueOf(selection.getName()));
+        addProductNameField.setText(String.valueOf(selection.getName()));
+        addProductInvField.setPromptText(String.valueOf(selection.getStock()));
+        addProductInvField.setText(String.valueOf(selection.getStock()));
+        addProductPriceField.setPromptText(String.valueOf(selection.getPrice()));
+        addProductPriceField.setText(String.valueOf(selection.getPrice()));
+        addProductMaxField.setPromptText(String.valueOf(selection.getMax()));
+        addProductMaxField.setText(String.valueOf(selection.getMax()));
+        addProductMinField.setPromptText(String.valueOf(selection.getMin()));
+        addProductMinField.setText(String.valueOf(selection.getMin()));
+
+        associatedPartsBeingModded.addAll(selection.getAllAssociatedParts());
+        associatedPartTable.setItems(selection.getAllAssociatedParts());
+
+
+        //associatedPartsBeingModded.setAssociatedPartsListIds(productBeingModded.getAllAssociatedPartIds());
     }
 
 
@@ -205,12 +225,12 @@ public class ProductMenuController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (productBeingModdedTemp != null) {
-            DevTool.println("product" + productBeingModdedTemp.getId() + " " + productBeingModdedTemp.getName());
-        } else {
-            DevTool.println("new product being added...");
-            productBeingModdedTemp = new Product(-1,null,-1, -1, -1, -1);
-        }
+//        if (associatedPartsBeingModded != null) {
+//            DevTool.println("product" + associatedPartsBeingModded.getId() + " " + associatedPartsBeingModded.getName());
+//        } else {
+//            DevTool.println("new product being added...");
+//            associatedPartsBeingModded = new Product(-1,null,-1, -1, -1, -1);
+//        }
         // Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
@@ -224,7 +244,7 @@ public class ProductMenuController implements Initializable {
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
-        associatedPartTable.setItems(productBeingModdedTemp.getAllAssociatedParts());//TODO Setup Associated test data
+        associatedPartTable.setItems(associatedPartsBeingModded);//TODO Setup Associated test data
         DevTool.println("Part Table Set");
     }
 
@@ -270,12 +290,13 @@ public class ProductMenuController implements Initializable {
 
         // Retrieve the selected part from the PartTable.
         Part select = PartTable.getSelectionModel().getSelectedItem();
-        if (select == null) { // Check for null to avoid Null Exception.
+        if (select == null) { // textFieldCheck for null to avoid Null Exception.
             return;
+            //TODO add alert
         }
         int partID = select.getId(); // Retrieve the part ID.
-        productBeingModdedTemp.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
-
+      //  associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
+        associatedPartsBeingModded.add(select);
         // Set the cell values for the associated part table columns.
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
@@ -283,9 +304,9 @@ public class ProductMenuController implements Initializable {
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
         // Set the items in the associated part table to the associated parts of the product being modified.
-        //productBeingModded.setAssociatedPartsListIds(productBeingModdedTemp.getAllAssociatedPartIds());
-        associatedPartTable.setItems(productBeingModded.getAllAssociatedParts());
-
+        //productBeingModded.setAssociatedPartsListIds(associatedPartsBeingModded.getAllAssociatedPartIds());
+       // associatedPartTable.setItems(productBeingModded.getAllAssociatedParts());
+associatedPartTable.setItems(associatedPartsBeingModded);
         DevTool.println("Part Table Set"); // Print a message to indicate that the associated part table has been updated.
     }
 
@@ -304,9 +325,11 @@ public class ProductMenuController implements Initializable {
         boolean t = PopupAlert.conformationAlert("Parts", "Delete","Do you want to delete this part?");
         if (t) {
             Part selection = Objects.requireNonNull(select);
-            productBeingModdedTemp.removeAssociated(select.getId());
 
-            associatedPartTable.setItems(productBeingModdedTemp.getAllAssociatedParts());
+
+            associatedPartsBeingModded.remove(select);
+
+            associatedPartTable.setItems(associatedPartsBeingModded);
         }
     }
 
@@ -322,7 +345,7 @@ public class ProductMenuController implements Initializable {
         System.out.println("Searching in Parts...");
 
         // Creating a new parts list to display & replacing the table items with selected items
-        ObservableList<Part> displayedParts = Inventory.searchByPartNameOrID(searchFieldValue);
+        ObservableList<Part> displayedParts = Inventory.lookupPart(searchFieldValue);
         PartTable.setItems(displayedParts);
 
         System.out.println("Parts displayed");

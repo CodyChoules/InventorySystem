@@ -1,9 +1,6 @@
 package codychoules.application.main;
 
-import codychoules.application.model.InHouse;
-import codychoules.application.model.Inventory;
-import codychoules.application.model.Outsourced;
-import codychoules.application.model.Part;
+import codychoules.application.model.*;
 import codychoules.devtools.DevTool;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +20,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static codychoules.application.model.Inventory.getAllPartIds;
-import static codychoules.application.model.Inventory.getAllProductIds;
 
 /**
  * The PartMenuController is the controller class for the PartMenu.
@@ -109,7 +105,7 @@ public class PartMenuController implements Initializable {
         DevTool.println("Save Pressed");
 
         //Calls a part method to validate inputs, "errorText" is where the notifications will be sent.
-        boolean check = Inventory.partTextInputCheck(
+        boolean check = InventoryUtility.textFieldCheck(
                 addPartNameField,
                 addPartInvField,
                 addPartPriceField,
@@ -125,12 +121,14 @@ public class PartMenuController implements Initializable {
 
         //Generates a new ID or if part is being modified, find the part to be replaced with a matching Id.
         Part replacePart = null;
+        int replacePartIndex = -1;
         int id = -1;
         //If adding id is generated.
         if (addPartIDField.getText().length() == 0){
-            id = Inventory.generateUniqueId(getAllPartIds(), Inventory.nextPartId);}
+            id = InventoryUtility.generateUniqueId(getAllPartIds(), InventoryUtility.nextPartId);}
         else {
-            replacePart = Inventory.findPartWithPartId(Integer.parseInt(addPartIDField.getText()));
+            replacePart = InventoryUtility.findPartWithPartId(Integer.parseInt(addPartIDField.getText()));
+            replacePartIndex = Inventory.getAllParts().indexOf(replacePart);
             DevTool.println("Found partBeingReplaced: " + replacePart.getName());
             id = Integer.parseInt(addPartIDField.getText());
         }
@@ -162,8 +160,14 @@ public class PartMenuController implements Initializable {
             modingPart = new Outsourced(id, name, price, inv, min, max, supplier);
         }
 
-        Inventory.allParts.remove(replacePart);
-        Inventory.allParts.add(modingPart);
+        if (replacePart == null){
+            Inventory.addPart(modingPart);
+        } else {
+            Inventory.updatePart(replacePartIndex, modingPart);
+        }
+
+//        Inventory.allParts.remove(replacePart);
+//        Inventory.allParts.add(modingPart);
 
         //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
