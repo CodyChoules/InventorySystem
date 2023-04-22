@@ -28,11 +28,8 @@ import java.util.ResourceBundle;
  * @author Cody Choules
  */
 public class ProductMenuController implements Initializable {
-    //!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
 
     //FXML Declarations
-    @FXML
-    public RadioButton toggleProductOutsourcedButton;
     @FXML
     public Text errorText;
     @FXML
@@ -103,7 +100,7 @@ public class ProductMenuController implements Initializable {
      * @param actionEvent The ActionEvent associated with the "Enter" key press.
      * @throws IOException If an I/O error occurs during the handling of the event.
      */
-    @FXML // Handles Save when pressing enter on text feild, For ease of use.
+    @FXML
     public void onTextFieldEnterProduct(ActionEvent actionEvent) throws IOException {
         DevTool.println("Enter Pressed on Field");
         handleSaveButton(actionEvent);
@@ -113,6 +110,17 @@ public class ProductMenuController implements Initializable {
      * Handles Save button with saving the product into product list. This also finalizes
      * all the changes made to the product and adds or replaces the product int the product list. In addition,
      * this parses and check all text fields using the Inventory.partTextInputCheck method.
+     * RUNTIME ERROR: Previously, this method utilized a list of part IDs that would reference the related parts.
+     * This results in the associated parts automatically updating upon editing but my methodology lead to a runtime error.
+     * This error would save the associated Parts added even when the Product Menu was cancelled. This was likely due to improper public or static
+     * method assignment. After speaking to a professor he pointed out the correct methodology called for in the UML and Project Rubric showing that
+     * this feature was out of scope for this project. So I reverted to the previous iteration and replaced my ID based associated Parts list with a
+     * Part class based associated Parts list.
+     * FUTURE ENHANCEMENT: As a proposed enhancement for this project that I would advocate for is implementing an ID based methodology for the associated
+     * parts. This would entail a list of IDs that only contain ID values that reference the IDs of the allPartsList without any other information.
+     * Then, when the associated parts are observed the data would be shown from the actual part object instead of a separate associated part instance.
+     * This would result in a program that when the allPartsList is altered the corresponding associated parts are also altered. Currently, the parts
+     * are saved in their current state, and do not change when parts are updated or deleted resulting in a possible vulnerability to data integrity.
      *
      * @param actionEvent The ActionEvent associated with the "Save" button press.
      * @throws IOException If an I/O error occurs during the handling of the event.
@@ -137,14 +145,12 @@ public class ProductMenuController implements Initializable {
 
         // Generates a new ID or if product is being modified, find the product  to be replaced with a matching ID.
         Product replaceProduct = null;
-        int replaceProductIndex = -1;
-        int id = -1;
+        int id;
         // If adding id is generated.
         if (addProductIDField.getText().length() == 0){
             id = InventoryUtility.generateUniqueId(InventoryUtility.getAllProductIds(), InventoryUtility.nextProductId);}
         else {
             replaceProduct = Inventory.findProductWithProductId(Integer.parseInt(addProductIDField.getText()));
-            replaceProductIndex = Inventory.getAllProducts().indexOf(replaceProduct);
             DevTool.println("Found product BeingReplaced: " + replaceProduct.getName());
             id = Integer.parseInt(addProductIDField.getText());
         }
@@ -225,12 +231,6 @@ public class ProductMenuController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        if (associatedPartsBeingModded != null) {
-//            DevTool.println("product" + associatedPartsBeingModded.getId() + " " + associatedPartsBeingModded.getName());
-//        } else {
-//            DevTool.println("new product being added...");
-//            associatedPartsBeingModded = new Product(-1,null,-1, -1, -1, -1);
-//        }
         // Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
@@ -244,7 +244,7 @@ public class ProductMenuController implements Initializable {
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
-        associatedPartTable.setItems(associatedPartsBeingModded);//TODO Setup Associated test data
+        associatedPartTable.setItems(associatedPartsBeingModded);
         DevTool.println("Part Table Set");
     }
 
@@ -268,15 +268,6 @@ public class ProductMenuController implements Initializable {
         addProductMaxField.setText(String.valueOf(passedProduct.getMax()));
         addProductMinField.setPromptText(String.valueOf(passedProduct.getMin()));
         addProductMinField.setText(String.valueOf(passedProduct.getMin()));
-//        if (passedProduct.getClass().getName().equals("InHouse")) {
-//            InHouse ih = (InHouse) passedProduct;
-//            addProductMachineIDField.setPromptText(String.valueOf(ih.getMachineID()));
-//            addProductMachineIDField.setText(String.valueOf(ih.getMachineID()));
-//        } else {
-//            Outsourced os = (Outsourced) passedProduct;
-//            addProductMachineIDField.setPromptText(String.valueOf(os.getCompanyName()));
-//            addProductMachineIDField.setText(String.valueOf(os.getCompanyName()));
-//        }
     }
 
     /**
@@ -295,7 +286,7 @@ public class ProductMenuController implements Initializable {
             //TODO add alert
         }
         int partID = select.getId(); // Retrieve the part ID.
-      //  associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
+        //  associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
         associatedPartsBeingModded.add(select);
         // Set the cell values for the associated part table columns.
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -304,9 +295,7 @@ public class ProductMenuController implements Initializable {
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
         // Set the items in the associated part table to the associated parts of the product being modified.
-        //productBeingModded.setAssociatedPartsListIds(associatedPartsBeingModded.getAllAssociatedPartIds());
-       // associatedPartTable.setItems(productBeingModded.getAllAssociatedParts());
-associatedPartTable.setItems(associatedPartsBeingModded);
+        associatedPartTable.setItems(associatedPartsBeingModded);
         DevTool.println("Part Table Set"); // Print a message to indicate that the associated part table has been updated.
     }
 
@@ -350,4 +339,5 @@ associatedPartTable.setItems(associatedPartsBeingModded);
 
         System.out.println("Parts displayed");
     }
+
 }
