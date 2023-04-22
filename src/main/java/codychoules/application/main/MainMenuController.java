@@ -188,7 +188,6 @@ public class MainMenuController implements Initializable {
      */
     public void handleSearchParButton(ActionEvent actionEvent) {
 
-        //Using searchPartField class
         String searchFieldValue = searchPartField.getText();
 
         DevTool.println("Searching in Parts...");
@@ -243,11 +242,11 @@ public class MainMenuController implements Initializable {
     public void handleModProductButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("modProductClick");
 
-        //Retrieves the selected product to be modified !!!!TODO needs NUll exception
+        //Retrieves the selected product to be modified
         Product select = ProductTable.getSelectionModel().getSelectedItem();
 
 
-     //   ProductMenuController.passSelection(select);
+        // ProductMenuController.passSelection(select);
         if (select == null) {return;}
         Product selection = Objects.requireNonNull(select);
 
@@ -292,23 +291,22 @@ public class MainMenuController implements Initializable {
      */
     public void handleDelProductButton(ActionEvent actionEvent) {
 
-        // Get the selected product from the product table
+        //Get the selected product from the product table
         Product select = ProductTable.getSelectionModel().getSelectedItem();
         if (select == null) {
-            // Show an alert if no product is selected
             PopupAlert.notSelectedAlert("product");
             return;
         }
 
         if (select.getAllAssociatedParts().size() > 0) {
-            // Show an error alert if the selected product has associated parts
+            //Show an error alert if the selected product has associated parts
             Alert alert = new Alert(Alert.AlertType.ERROR, "Associated parts are linked to this product, please modify product to have no associated parts before deleting");
             alert.setTitle("Product");
             alert.setHeaderText("Product has associated parts!");
             //return;
         }
 
-        // Show a confirmation alert for deleting the selected product
+        //Show a confirmation alert for deleting the selected product
         boolean t = PopupAlert.conformationAlert("Products", "Delete", "Do you want to delete this product?");
         if (t) {
             // Delete the selected product from the allProducts list and update the product table
@@ -329,12 +327,12 @@ public class MainMenuController implements Initializable {
      */
     public void handleSearchProductButton(ActionEvent actionEvent) {
 
-        // Using searchProductField class
+        //Using searchProductField class
         String searchFieldValue = searchProductField.getText();
 
         DevTool.println("Searching in Products:");
 
-        // Creating a new products list to display & replacing the table items with selected items
+        //Creating a new products list to display & replacing the table items with selected items
         ObservableList<Product> displayedProducts = Inventory.lookupProduct(searchFieldValue);
         ProductTable.setItems(displayedProducts);
 

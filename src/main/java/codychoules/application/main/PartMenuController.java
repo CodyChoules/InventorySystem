@@ -64,13 +64,13 @@ public class PartMenuController implements Initializable {
     public void handleCancelButton(ActionEvent actionEvent) throws IOException {
         DevTool.println("Cancel Pressed");
 
-        // Retrieve stage & set root to Menu.
+        //Gets window from button
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
 
-        // Load the main menu view using FXMLLoader
+        //Load the main menu view using the FXMLLoader
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
 
-        // Create a new scene with the loaded root and set it to the stage
+        //Create a new scene with the loaded root and set it to stage
         Scene modScene = new Scene(root, 1000, 600);
         stage.setTitle("Main Menu");
         stage.setScene(modScene);
@@ -166,9 +166,6 @@ public class PartMenuController implements Initializable {
             Inventory.updatePart(replacePartIndex, modingPart);
         }
 
-//        Inventory.allParts.remove(replacePart);
-//        Inventory.allParts.add(modingPart);
-
         //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
 
@@ -190,9 +187,9 @@ public class PartMenuController implements Initializable {
      * @param actionEvent The action event triggered by the "In-House" button
      */
     public void clickInHouseHandler(ActionEvent actionEvent) {
-        DevTool.println("In-House Clicked"); // Output message to console
-        addMachineIdText.setText("Machine ID"); // Set text for a UI element
-        tick++; // Increment tick counter
+        DevTool.println("In-House Clicked");
+        addMachineIdText.setText("Machine ID");
+        tick++; //Increment tick counter
     }
 
     /**
@@ -208,7 +205,7 @@ public class PartMenuController implements Initializable {
             txt = "Make up your mind!"; //Something for the bunny.
         }
 
-        // Set the text of the "addMachineIdText" field
+        //Sets the text of the "addMachineIdText" field
         addMachineIdText.setText(txt);
     }
 

@@ -18,8 +18,8 @@ public class PopupAlert  {
     /**
      * Displays a confirmation alert dialog with the specified title, header, and description.
      *
-     * @param title       The title of the confirmation alert.
-     * @param header      The header text of the confirmation alert.
+     * @param title The title of the confirmation alert.
+     * @param header The header text of the confirmation alert.
      * @param discription The description text of the confirmation alert.
      * @return  if the user clicked OK as true or if not as false.
      */

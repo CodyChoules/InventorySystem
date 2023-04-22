@@ -14,7 +14,7 @@ public class DevTool {
     /**
      * Boolean to turn off or on DevTool functions
      */
-    private static boolean devToolsOn = true;
+    private static boolean devToolsOn = false;
 
     /**
      * Sets the window centered on the cursor.
@@ -23,13 +23,15 @@ public class DevTool {
      * @param primaryStage The JavaFX Stage object
      */
     public static void setWindowCenteredOnCursor(Scene scene, Stage primaryStage) {
-        double mouseX = java.awt.MouseInfo.getPointerInfo().getLocation().x;
-        double mouseY = java.awt.MouseInfo.getPointerInfo().getLocation().y;
-        int sceneWidth = scene.widthProperty().intValue();
-        int halfWidth = sceneWidth / 2;
-        primaryStage.setX(mouseX - halfWidth);
-        primaryStage.setY(mouseY - 10);
-        System.out.print("Centered stage on mouse with: " + sceneWidth + " / 2 = " + halfWidth + " ... \n");
+        if (devToolsOn) {
+            double mouseX = java.awt.MouseInfo.getPointerInfo().getLocation().x;
+            double mouseY = java.awt.MouseInfo.getPointerInfo().getLocation().y;
+            int sceneWidth = scene.widthProperty().intValue();
+            int halfWidth = sceneWidth / 2;
+            primaryStage.setX(mouseX - halfWidth);
+            primaryStage.setY(mouseY - 10);
+            System.out.print("Centered stage on mouse with: " + sceneWidth + " / 2 = " + halfWidth + " ... \n");
+        }
     }
 
     /**

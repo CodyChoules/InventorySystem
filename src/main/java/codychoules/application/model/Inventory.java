@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * This is a utility class for managing parts and products.
+ * This is an additional utility class for managing parts and products.
  */
 public class Inventory {
 
@@ -167,16 +167,6 @@ public class Inventory {
         return allParts;
     }
 
-    //End of UML diagram.
-
-
-
-
-
-
-
-
-
     /**
      * Finds a product with the given product ID.
      *
@@ -197,9 +187,6 @@ public class Inventory {
         return returnedProduct;
     }
 
-
-
-
     /**
      * Retrieves a list of all part IDs in the main list.
      *
@@ -212,9 +199,4 @@ public class Inventory {
         }
         return ids;
     }
-
-    //Methods not included in the UML vvvv
-
-
-
 }

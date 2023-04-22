@@ -125,12 +125,12 @@ public class ProductMenuController implements Initializable {
      * @param actionEvent The ActionEvent associated with the "Save" button press.
      * @throws IOException If an I/O error occurs during the handling of the event.
      */
-    @FXML  // Handles Save button with saving the product into the product list
+    @FXML  //Handles Save button with saving the product into the product list
     private void handleSaveButton(ActionEvent actionEvent) throws IOException {
 
         DevTool.println("Save Pressed");
 
-        // Calls a product method to validate inputs, "errorText" is where the notifications will be sent.
+        //Calls a product method to validate inputs, "errorText" is where the notifications will be sent.
         boolean check = InventoryUtility.textFieldCheck(
                 addProductNameField,
                 addProductInvField,
@@ -143,10 +143,10 @@ public class ProductMenuController implements Initializable {
             return;
         }
 
-        // Generates a new ID or if product is being modified, find the product  to be replaced with a matching ID.
+        //Generates a new ID or if product is being modified, find the product  to be replaced with a matching ID.
         Product replaceProduct = null;
         int id;
-        // If adding id is generated.
+        //Generates ID if one is not there
         if (addProductIDField.getText().length() == 0){
             id = InventoryUtility.generateUniqueId(InventoryUtility.getAllProductIds(), InventoryUtility.nextProductId);}
         else {
@@ -156,14 +156,14 @@ public class ProductMenuController implements Initializable {
         }
 
 
-        // Retrieves values from the fields now that they have been validated
+        //Retrieves values from the fields now that they have been validated
         String name = addProductNameField.getText();
         int inv = Integer.parseInt(addProductInvField.getText());
         double price = Double.parseDouble(addProductPriceField.getText());
         int max = Integer.parseInt(addProductMaxField.getText());
         int min = Integer.parseInt(addProductMinField.getText());
 
-        // Creation of product instance and parameter placement based on type(concrete class)
+        //Creation of product instance and parameter placement based on type(concrete class)
         Product modingProduct;
         modingProduct = new Product(id, name, price, inv, min,  max);
         modingProduct.setAllAssociatedParts(associatedPartsBeingModded);
@@ -174,7 +174,7 @@ public class ProductMenuController implements Initializable {
             Inventory.updateProduct(selectedProdIndex, modingProduct);
         }
 
-        // Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
+        //Resetting error text to indicate problems are solved, For additional functionality if save does not exit window in another iteration.
         errorText.setText("");
 
         DevTool.printProductData(modingProduct);
@@ -183,7 +183,7 @@ public class ProductMenuController implements Initializable {
 
         DevTool.println("Save Pressed");
 
-        // Retrieve stage & set root to Menu.
+        //Retrieve stage & set root to Menu.
         Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu-view.fxml")));
 
@@ -231,7 +231,7 @@ public class ProductMenuController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Part Table Column Initialization
+        //Part Table Column Initialization
         PartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         PartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         PartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
@@ -239,7 +239,7 @@ public class ProductMenuController implements Initializable {
         PartTable.setItems(Inventory.getAllParts());
         DevTool.println("Part Table Set");
 
-        // Associated Part Table Column Initialization
+        //Associated Part Table Column Initialization
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
@@ -279,7 +279,7 @@ public class ProductMenuController implements Initializable {
     public void handleAddPartButton(ActionEvent actionEvent) {
         DevTool.println("modProductClick"); // Print a message to indicate the button click.
 
-        // Retrieve the selected part from the PartTable.
+        //Retrieve the selected part from the PartTable.
         Part select = PartTable.getSelectionModel().getSelectedItem();
         if (select == null) { // textFieldCheck for null to avoid Null Exception.
             PopupAlert.notSelectedAlert("Part");
@@ -287,15 +287,15 @@ public class ProductMenuController implements Initializable {
 
         }
         int partID = select.getId(); // Retrieve the part ID.
-        //  associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
+        //associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
         associatedPartsBeingModded.add(select);
-        // Set the cell values for the associated part table columns.
+        //Set the cell values for the associated part table columns.
         associatedPartIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         associatedPartNameCol.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         associatedPartStockCol.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         associatedPartPriceCol.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
-        // Set the items in the associated part table to the associated parts of the product being modified.
+        //Set the items in the associated part table to the associated parts of the product being modified.
         associatedPartTable.setItems(associatedPartsBeingModded);
         DevTool.println("Part Table Set"); // Print a message to indicate that the associated part table has been updated.
     }
@@ -329,12 +329,11 @@ public class ProductMenuController implements Initializable {
      * @param actionEvent The ActionEvent triggered by the search product button.
      */
     public void handleSearchProductButton(ActionEvent actionEvent) {
-        // Using searchPartField class
         String searchFieldValue = searchPartField.getText();
 
         DevTool.println("Searching in Parts...");
 
-        // Creating a new parts list to display & replacing the table items with selected items
+        //Creating a new parts list to display & replacing the table items with selected items
         ObservableList<Part> displayedParts = Inventory.lookupPart(searchFieldValue);
         PartTable.setItems(displayedParts);
 

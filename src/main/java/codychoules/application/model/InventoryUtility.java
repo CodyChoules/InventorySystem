@@ -291,7 +291,7 @@ public class InventoryUtility {
             DevTool.println(item.getName());
         }
 
-        // Creating and adding test data for products.
+        //Creating and adding test data for products.
         Product Product1 = new Product(generateUniqueId(getAllProductIds(), nextProductId), "Bolt Assembly", 100.00, 5, 3,4);
         Inventory.addProduct(Product1);
         Product Product2 = new Product(generateUniqueId(getAllProductIds(), nextProductId), "Nut Assembly", 150.00, 3, 3,6);
@@ -332,7 +332,6 @@ public class InventoryUtility {
      *
      * @return A List of Integer representing all product IDs.
      */
-
     public static List<Integer> getAllProductIds() {
         List<Integer> ids = new ArrayList<>();
         for (Product product : Inventory.getAllProducts()) {
