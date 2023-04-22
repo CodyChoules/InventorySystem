@@ -272,7 +272,10 @@ public class InventoryUtility {
 
         testDataInserted =true;
 
-
+        //If dev tools are off no test data is entered
+        if (!DevTool.toolsState()){
+            return;
+        }
 
         //Creating and adding test data for Parts.
         Part part1 = new Outsourced(generateUniqueId(Inventory.getAllPartIds(),nextPartId), "Bolt", 1, 1, 1, 2,"1");

@@ -138,7 +138,7 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader((getClass().getResource("part-menu-view.fxml")));
         Parent root = loader.load();
 
-        System.out.println("part selection created: ID: " + selection.getId() + " Name: " + selection.getName());
+        DevTool.println("part selection created: ID: " + selection.getId() + " Name: " + selection.getName());
         //"codychoules/application/main/part-menu-view.fxml"
 
         //exhibitB: using loader to access ModifyProductController.displayPartInFields method, Needed to keep method non-static
@@ -191,13 +191,13 @@ public class MainMenuController implements Initializable {
         //Using searchPartField class
         String searchFieldValue = searchPartField.getText();
 
-        System.out.println("Searching in Parts...");
+        DevTool.println("Searching in Parts...");
 
         //Creating a new parts list to display & replacing the table items with selected items
         ObservableList<Part> displayedParts = Inventory.lookupPart(searchFieldValue);
         PartTable.setItems(displayedParts);
 
-        System.out.println("Parts displayed");
+        DevTool.println("Parts displayed");
 
     }
 
@@ -241,7 +241,7 @@ public class MainMenuController implements Initializable {
      * @throws IOException If an error occurs while loading the FXML file.
      */
     public void handleModProductButton(ActionEvent actionEvent) throws IOException {
-        System.out.println("modProductClick");
+        DevTool.println("modProductClick");
 
         //Retrieves the selected product to be modified !!!!TODO needs NUll exception
         Product select = ProductTable.getSelectionModel().getSelectedItem();
@@ -256,7 +256,7 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader((getClass().getResource("product-menu-view.fxml")));
         Parent root = loader.load();
 
-        System.out.println("product selection created: ID: " + selection.getId() + " Name: " + selection.getName());
+        DevTool.println("product selection created: ID: " + selection.getId() + " Name: " + selection.getName());
 
         //"codychoules/application/main/product-menu-view.fxml"
 
@@ -332,13 +332,13 @@ public class MainMenuController implements Initializable {
         // Using searchProductField class
         String searchFieldValue = searchProductField.getText();
 
-        System.out.println("Searching in Products:");
+        DevTool.println("Searching in Products:");
 
         // Creating a new products list to display & replacing the table items with selected items
         ObservableList<Product> displayedProducts = Inventory.lookupProduct(searchFieldValue);
         ProductTable.setItems(displayedProducts);
 
-        System.out.println("Products displayed");
+        DevTool.println("Products displayed");
     }
 
     /**

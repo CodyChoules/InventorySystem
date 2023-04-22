@@ -282,8 +282,9 @@ public class ProductMenuController implements Initializable {
         // Retrieve the selected part from the PartTable.
         Part select = PartTable.getSelectionModel().getSelectedItem();
         if (select == null) { // textFieldCheck for null to avoid Null Exception.
+            PopupAlert.notSelectedAlert("Part");
             return;
-            //TODO add alert
+
         }
         int partID = select.getId(); // Retrieve the part ID.
         //  associatedPartsBeingModded.addAssociatedPartId(partID); // Add the part ID to the associated parts of the product.
@@ -331,13 +332,13 @@ public class ProductMenuController implements Initializable {
         // Using searchPartField class
         String searchFieldValue = searchPartField.getText();
 
-        System.out.println("Searching in Parts...");
+        DevTool.println("Searching in Parts...");
 
         // Creating a new parts list to display & replacing the table items with selected items
         ObservableList<Part> displayedParts = Inventory.lookupPart(searchFieldValue);
         PartTable.setItems(displayedParts);
 
-        System.out.println("Parts displayed");
+        DevTool.println("Parts displayed");
     }
 
 }

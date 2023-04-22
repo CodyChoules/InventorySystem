@@ -47,6 +47,13 @@ public class DevTool {
     }
 
     /**
+     * gets state of developer tools.
+     */
+    public static boolean toolsState() {
+        return devToolsOn;
+    }
+
+    /**
      * Prints the given string to the console, but only if developer tools are enabled.
      *
      * @param string The string to be printed.

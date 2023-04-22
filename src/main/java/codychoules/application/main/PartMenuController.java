@@ -28,7 +28,7 @@ import static codychoules.application.model.Inventory.getAllPartIds;
  * @author Cody Choules
  */
 public class PartMenuController implements Initializable {
-    //TODO!!!! why @FXML & how do I compact this into a list within another class to call upon? vv
+
 
     //FXML Declarations
     @FXML
@@ -224,7 +224,6 @@ public class PartMenuController implements Initializable {
         partBeingModded = selection;
     }
 
-    //TODO Implement mod part functionality
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (partBeingModded != null) {
