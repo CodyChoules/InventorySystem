@@ -225,6 +225,11 @@ public class PartMenuController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if (partBeingModded != null) {
             DevTool.println("part" + partBeingModded.getId() + " " + partBeingModded.getName());
+
+            if (partBeingModded instanceof Outsourced) {
+                togglePartOutsourcedButton.setSelected(true);
+                addMachineIdText.setText("Supplier Name");
+            }
         }
     }
 

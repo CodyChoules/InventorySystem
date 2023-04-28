@@ -297,13 +297,18 @@ public class MainMenuController implements Initializable {
             PopupAlert.notSelectedAlert("product");
             return;
         }
+        DevTool.println("Number of associated Parts being deleted: " + select.getAllAssociatedParts().size());
 
         if (select.getAllAssociatedParts().size() > 0) {
-            //Show an error alert if the selected product has associated parts
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Associated parts are linked to this product, please modify product to have no associated parts before deleting");
-            alert.setTitle("Product");
-            alert.setHeaderText("Product has associated parts!");
-            //return;
+                Alert alert = new Alert(Alert.AlertType.NONE, "test");
+
+                alert.setTitle("Warning, this product has Associated Parts");
+                alert.setHeaderText(null);
+                alert.setContentText("Associated parts are linked to this product, please modify product to have no associated parts before deleting.");
+                alert.getButtonTypes().setAll(ButtonType.OK);
+                alert.showAndWait();
+            productTableExceptionText.setText("Delete canceled. Product cannot have associated parts and be deleted.");
+            return;
         }
 
         //Show a confirmation alert for deleting the selected product
