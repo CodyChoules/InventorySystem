@@ -1,0 +1,4 @@
+module:codychoules.application.inventorysystem
+codychoules.application.main
+codychoules.application.model
+codychoules.devtools

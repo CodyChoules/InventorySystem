@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"codychoules.application.inventorysystem","l":"codychoules.application.main"},{"m":"codychoules.application.inventorysystem","l":"codychoules.application.model"},{"m":"codychoules.application.inventorysystem","l":"codychoules.devtools"}];updateSearchResults();
